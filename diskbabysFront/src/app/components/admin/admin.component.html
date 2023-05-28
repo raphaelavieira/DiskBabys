@@ -6,16 +6,16 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" >Listar Clientes</a>
+        <a class="nav-link" id="listar-clientes" (click)="changePage('listar-clientes')" [ngClass]="{'active': currentPage === 'listar-clientes'}">Listar Clientes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" >Listar Pedidos</a>
+        <a class="nav-link" id="listar-pedidos" (click)="changePage('listar-pedidos')" [ngClass]="{'active': currentPage === 'listar-pedidos'}">Listar Pedidos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" >Atualizar Produto</a>
+        <a class="nav-link" id="atualizar-produto" (click)="changePage('atualizar-produto')" [ngClass]="{'active': currentPage === 'atualizar-produto'}">Atualizar Produto</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" >Adicionar Produto</a>
+        <a class="nav-link" id="adicionar-produto" (click)="changePage('adicionar-produto')" [ngClass]="{'active': currentPage === 'adicionar-produto'}">Adicionar Produto</a>
       </li>
     </ul>
     <ul class="navbar-nav">
@@ -26,7 +26,7 @@
   </div>
 </nav>
 
-<div class="container profile-page">
+<div class="container profile-page" *ngIf="currentPage === 'listar-clientes'">
   <div class="row">
     <div class="col-xl-6 col-lg-7 col-md-12" *ngFor="let user of users$ | async">
       <div class="card profile-header">
@@ -51,7 +51,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="atualizarModal" tabindex="-1" role="dialog" aria-labelledby="atualizarModalLabel" aria-hidden="true" *ngIf="showModal">
+<div class="modal fade" id="atualizarModal" tabindex="-1" role="dialog" aria-labelledby="atualizarModalLabel" aria-hidden="true" *ngIf="showModal &&  currentPage === 'listar-clientes'" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -127,5 +127,45 @@
     </div>
   </div>
 </div>
+
+
+<div class="container profile-page" *ngIf="currentPage === 'adicionar-produto'">
+  <form [formGroup]="newProductForm" (ngSubmit)="postProduct()" class="centerForm">
+    <h1 class="text-center">Adicionar um novo produto:</h1>
+
+    <div class="form-group">
+      <label for="nameInp">Nome do Produto:</label>
+      <input #nameInp class="form-control" id="nameInp" placeholder="Nome" formControlName="product_name">
+    </div>
+
+    <div class="form-group">
+      <label for="descInp">Descrição:</label>
+      <textarea #descInp class="form-control" id="descInp" placeholder="Descreva o produto" formControlName="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="priceInp">Preço:</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">R$</span>
+        </div>
+        <input #priceInp class="form-control" id="priceInp" type="number" placeholder="0.00" formControlName="price">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fileInp">Imagem:</label>
+      <div class="custom-file">
+        <input #fileInp class="custom-file-input" id="fileInp" type="file" accept=".jpeg" (change)="onFileChange($event)">
+        <label class="custom-file-label" for="fileInp">Escolha um arquivo JPEG</label>
+      </div>
+      <small class="form-text text-muted">Somente arquivos JPEG são permitidos.</small>
+    </div>
+
+    <button class="btn btn-primary btn-block adminBtn" type="submit">Adicionar novo produto</button>
+  </form>
+</div>
+
+
 
 

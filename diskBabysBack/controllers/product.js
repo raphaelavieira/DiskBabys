@@ -77,7 +77,7 @@ exports.addProduct = async (req, res, next) => {
     if (!price) {
         res.status(200).json({ status: false, message: 'Preço do produto é obrigatorio' });
         return;
-      }
+    }
   
     const productDetails = {
       product_name,

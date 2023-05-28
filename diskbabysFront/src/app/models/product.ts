@@ -1,7 +1,7 @@
 export interface Product {
   pid: number;
-  product_name: string;
-  description: string;
-  price: number;
-  picture: string;
+  nome_produto: string;
+  descricao: string;
+  preco: number;
+  foto: string;
 }

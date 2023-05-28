@@ -30,16 +30,15 @@ module.exports = class Product {
 
     static updateWithoutPicture(product)
     {
-        return db.execute('update product set product_name = ? , description = ?, price = ? where pid = ?',[product.product_name,product.description,product.price,product.pid]);
+        return db.execute('update product set nome_produto = ? , descricao = ?, preco = ? where pid = ?',[product.product_name,product.description,product.price,product.pid]);
     }
 
     static updateWithPicture(product)
     {
-       
         try{
             var path = FileSave.saveProductPicture(product.picture,product.product_name);
 
-            return db.execute('update product set product_name = ? , description = ?, price = ?, picture = ? where pid = ?',[product.product_name,product.description,product.price, path, product.pid]);
+            return db.execute('update product set nome_produto = ? , descricao = ?, preco = ?, foto = ? where pid = ?',[product.product_name,product.description,product.price, path, product.pid]);
         } catch (error) {
             
         }

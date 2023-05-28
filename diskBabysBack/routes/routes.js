@@ -20,9 +20,9 @@ router.delete('/user/:id', authenticateToken, userController.deleteUser);
 router.get('/user/shop', productController.getAllProducts)
 router.get('/user/shop/:pid', productController.getProduct)
 router.get('/user/shop/cart/:pid', productController.getProductForCart)
-router.post('/product', productController.addProduct)
-router.delete('/product/:pid', productController.deleteProduct)
-router.put('/product', productController.putProduct)
+router.post('/product', authenticateToken,  productController.addProduct)
+router.delete('/product/:pid', authenticateToken, productController.deleteProduct)
+router.put('/product', authenticateToken, productController.putProduct)
 
 
 module.exports = router;

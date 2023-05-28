@@ -7,11 +7,12 @@ exports.getAllProducts = async (req, res, next) => {
     try {
         const [allProducts] = await Product.fetchAll();
         for (var product of allProducts) {
-            product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.picture, 'base64');
+            product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.foto, 'base64');
         }
         res.status(200).json(allProducts);
     } catch {
         console.log('Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
@@ -96,34 +97,44 @@ exports.addProduct = async (req, res, next) => {
   };
   
 
-exports.deleteProduct = async (req, res, next) => {
+  exports.deleteProduct = async (req, res, next) => {
     try {
-        console.log(req.params.pid);
-        const deleteResponse = await Product.delete(req.params.pid);
-        res.status(200).json(deleteResponse);
-    } catch {
-        console.log('Error');
+      console.log(req.params.pid);
+      const deleteResponse = await Product.delete(req.params.pid);
+      res.status(200).json({ success: true, message: 'Produto excluído com sucesso' });
+    } catch (error) {
+      console.log('Error:', error);
+      res.status(200).json({ success: false, message: 'Erro ao excluir o produto' });
     }
-};
+  };
+  
 
 exports.putProduct = async (req, res, next) => {
-
+    const { pid, product_name, description, price, picture } = req.body;
+  
     const productDetails = {
-        pid: req.body.pid,
-        product_name: req.body.product_name,
-        description: req.body.description,
-        price: req.body.price,
-        picture: req.body.picture
+      pid,
+      product_name,
+      description,
+      price,
+      picture
+    };
+  
+    try {
+      let response;
+  
+      if (!picture || typeof picture === 'undefined') {
+        response = await Product.updateWithoutPicture(productDetails);
+      } else {
+        response = await Product.updateWithPicture(productDetails);
+      }
+  
+      res.status(200).json({ success: true, message: 'Produto atualizado com sucesso' });
+    } catch (error) {
+      console.log('Error:', error);
+      res.status(200).json({ success: false, message: 'Erro ao atualizar o produto' });
     }
-
-    //console.log(productDetails.picture);
-    // check if picture was recieved, if not dont create product
-    if (req.body.picture == null || req.body.picture == undefined || req.body.picture == "") {
-        var response = await Product.updateWithoutPicture(productDetails);
-        res.sendStatus(200);
-    }
-    else {
-        var response = await Product.updateWithPicture(productDetails);
-        res.sendStatus(200);
-    }
-}
+  };
+  
+  
+  

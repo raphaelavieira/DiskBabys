@@ -12,7 +12,7 @@
         <a class="nav-link" id="listar-pedidos" (click)="changePage('listar-pedidos')" [ngClass]="{'active': currentPage === 'listar-pedidos'}">Listar Pedidos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="atualizar-produto" (click)="changePage('atualizar-produto')" [ngClass]="{'active': currentPage === 'atualizar-produto'}">Atualizar Produto</a>
+        <a class="nav-link" id="atualizar-produto" (click)="changePage('atualizar-produto')" [ngClass]="{'active': currentPage === 'atualizar-produto'}">Inventário</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="adicionar-produto" (click)="changePage('adicionar-produto')" [ngClass]="{'active': currentPage === 'adicionar-produto'}">Adicionar Produto</a>
@@ -28,28 +28,37 @@
 
 <div class="container profile-page" *ngIf="currentPage === 'listar-clientes'">
   <div class="row">
-    <div class="col-xl-6 col-lg-7 col-md-12" *ngFor="let user of users$ | async">
-      <div class="card profile-header">
-        <div class="body">
-          <div class="row">
-            <div class="col-lg-4 col-md-4 col-12">
-              <div class="profile-image float-md-right"> <img src="{{ user.picture }}" alt=""> </div>
-            </div>
-            <div class="col-lg-8 col-md-8 col-12">
-              <h4 class="m-t-0 m-b-0"><strong>{{ user.name }}</strong></h4>
-              <span class="job_post">{{ user.email }}</span>
-              <p>{{ user.address }}</p>
-              <div>
-                <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#atualizarModal" (click)="update(user)">Atualizar</button>
-                <button class="btn btn-primary btn-round btn-danger ml-3" (click)="delete(user.id)">Excluir conta</button>
+    <ng-container *ngIf="(users$ | async)?.length; else noUsers">
+      <div class="col-xl-6 col-lg-7 col-md-12" *ngFor="let user of users$ | async">
+        <div class="card profile-header">
+          <div class="body">
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-12">
+                <div class="profile-image float-md-right">
+                  <img src="{{ user.picture }}" alt="">
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-8 col-12">
+                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }}</strong></h4>
+                <span class="job_post">{{ user.email }}</span>
+                <p>{{ user.address }}</p>
+                <div>
+                  <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#atualizarModal" (click)="update(user)">Atualizar</button>
+                  <button class="btn btn-primary btn-round btn-danger ml-3" (click)="delete(user.id)">Excluir conta</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
+
+  <ng-template #noUsers>
+    <p>Nenhum usuário cadastrado.</p>
+  </ng-template>
 </div>
+
 
 <div class="modal fade" id="atualizarModal" tabindex="-1" role="dialog" aria-labelledby="atualizarModalLabel" aria-hidden="true" *ngIf="showModal &&  currentPage === 'listar-clientes'" >
   <div class="modal-dialog" role="document">
@@ -128,6 +137,100 @@
   </div>
 </div>
 
+<div class="container profile-page" *ngIf="currentPage === 'atualizar-produto'">
+  <div class="container">
+    <h1>Inventário</h1>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Id do Produto</th>
+            <th>Foto do Produto</th>
+            <th>Nome do Produto</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Editar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="(products$ | async)?.length; else noProducts">
+            <tr *ngFor="let product of products$ | async">
+              <td>{{ product.pid }}</td>
+              <td><img class="product img-fluid" [src]="product.picture" width="70" height="70"></td>
+              <td>{{ product.nome_produto }}</td>
+              <td>{{ product.descricao }}</td>
+              <td>R$ {{ product.preco.toFixed(2) }}</td>
+              <td>
+                <button class="btn btn-primary " data-toggle="modal" data-target="#atualizarModalProduto" (click)="toggleUpdateProduct(product)">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn btn-danger ml-3" (click)="deteleProductDialog(product.pid)">
+                  <i class="bi bi-trash"></i> Deletar
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noProducts>
+      <p>Nenhum produto cadastrado.</p>
+    </ng-template>
+  </div>
+</div>
+
+
+<div class="modal fade" id="atualizarModalProduto" tabindex="-1" role="dialog" aria-labelledby="atualizarModalProduto" aria-hidden="true" *ngIf="showModal"  >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="atualizarModalProduto">Atualizar Cadastro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateProductForm"  novalidate *ngIf="productToUpdate">
+
+          <div class="form-group">
+            <label for="pidInp">ID do produto</label>
+            <input #pidInp class="form-control" id="pidInp" placeholder="Product ID" formControlName="pid" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="nameInp">Nome do produto:</label>
+            <input #nameInp class="form-control" id="nameInp" placeholder="Product Name" formControlName="product_name">
+          </div>
+
+          <div class="form-group">
+            <label for="descInp">Descrição:</label>
+            <input #descInp class="form-control" id="descInp" placeholder="Description" formControlName="description">
+          </div>
+
+          <div class="form-group">
+            <label for="priceInp">Preço:</label>
+            <input #priceInp class="form-control" id="priceInp" type="number" placeholder="Price" formControlName="price">
+          </div>
+
+
+          <img class="product" [src]="productToUpdate.picture" width="150" height="150" style="margin:auto;margin-bottom: 10px;" />
+          <input #fileInp class="file-upload" type="file" accept=".jpeg" (change)="onProductFileChange($event)" >
+          <small class="form-text text-muted">Somente arquivos JPEG são permitidos.</small>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="editProduct()">Atualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="container profile-page" *ngIf="currentPage === 'adicionar-produto'">
   <form [formGroup]="newProductForm" (ngSubmit)="postProduct()" class="centerForm">
@@ -165,6 +268,7 @@
     <button class="btn btn-primary btn-block adminBtn" type="submit">Adicionar novo produto</button>
   </form>
 </div>
+
 
 
 

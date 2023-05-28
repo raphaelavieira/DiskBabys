@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
 import { ProductCrudService } from 'src/app/services/product-crud.service';
 import { UserListCrudService } from 'src/app/services/user-list-crud.service';
@@ -19,6 +20,9 @@ export class AdminComponent implements OnInit {
   currentPage: string = 'listar-clientes';
   newProductForm: FormGroup;
   updateProductForm: FormGroup;
+  products$: Observable<Product[]>;
+  productToUpdate: Product;
+
 
   constructor(
     private router: Router,
@@ -28,12 +32,10 @@ export class AdminComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-
     this.users$ = this.userListCrudService.fetchAll();
-    console.log(this.users$)
     this.newProductForm = this.createProductFormGroup();
+    this.products$ = this.productCrudService.fetchAll();
     this.updateProductForm = this.createUpdateProductFormGroup();
-
   }
 
   createFormGroup(user): FormGroup {
@@ -65,7 +67,6 @@ export class AdminComponent implements OnInit {
       description: new FormControl("",[Validators.required]),
       price: new FormControl("",[Validators.required]),
       picture: new FormControl("",[Validators.required])
-
     });
   }
 
@@ -73,7 +74,6 @@ export class AdminComponent implements OnInit {
     this.updateUserForm = this.createFormGroup(userPut);
     this.showModal = true;
   }
-
   updateBase(): void {
     console.log(this.updateUserForm.value);
     var user = {
@@ -144,9 +144,7 @@ export class AdminComponent implements OnInit {
 
     } else if (page === 'adicionar-produto') {
       this.currentPage = 'adicionar-produto'
-
     }
-    console.log(this.currentPage)
   }
 
 
@@ -188,5 +186,69 @@ export class AdminComponent implements OnInit {
   }
 
 
+  toggleUpdateProduct(product: Product){
+      this.productToUpdate = product;
+      this.updateProductForm.controls['pid'].setValue(this.productToUpdate.pid);
+      this.updateProductForm.controls['product_name'].setValue(this.productToUpdate.nome_produto);
+      this.updateProductForm.controls['description'].setValue(this.productToUpdate.descricao);
+      this.updateProductForm.controls['price'].setValue(this.productToUpdate.preco);
+      this.showModal = true;
+  }
+  public onProductFileChange(event) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        this.updateProductForm.patchValue({
+          picture: reader.result
+        });
+        this.productToUpdate.foto = this.updateProductForm.controls['picture'].value;
+      };
+    }
+  }
+
+  editProduct()
+  {
+    this.productCrudService.updateProduct(this.updateProductForm.value).subscribe(
+      (response) => {
+        if (response.success) {
+          this.toastr.success(response.message, 'Sucesso');
+          this.currentPage = 'atualizar-produto'
+          location.reload();
+        } else {
+          this.toastr.error(response.message, 'Erro');
+        }
+      },
+      (error) => {
+        this.toastr.error('Erro interno no servidor', 'Erro');
+        console.error(error);
+      }
+      );
+  }
+
+
+
+  deteleProductDialog(id:number)
+  {
+    this.productCrudService.deleteProduct(id).subscribe(
+      (response) => {
+        if (response.success) {
+          this.toastr.success(response.message, 'Sucesso');
+          this.currentPage = 'atualizar-produto'
+          location.reload();
+        } else {
+          this.toastr.error(response.message, 'Erro');
+        }
+      },
+      (error) => {
+        this.toastr.error('Erro interno no servidor', 'Erro');
+        console.error(error);
+      }
+      );
+
+  }
 
 }

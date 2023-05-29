@@ -2,4 +2,38 @@
 <div style="width: 75%; margin: auto;text-align: center;">
     <img src="/assets/images/header.png" alt="Nome da imagem">
 </div>
+
+
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Id do Produto</th>
+        <th>Nome do Produto</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Ver</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products$ | async">
+        <td>{{ product.pid }}</td>
+        <td><img class="product" [src]="product.picture" width="70" height="70" alt="product image"></td>
+        <td>{{ product.nome_produto }}</td>
+        <td>{{ product.descricao }}</td>
+        <td>${{ product.preco }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="viewProduct(product.pid)">
+            <i class="bi bi-info-circle"></i> Ver
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
 <app-footer></app-footer>

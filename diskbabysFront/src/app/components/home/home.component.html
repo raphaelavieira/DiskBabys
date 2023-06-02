@@ -1,38 +1,36 @@
 <app-navbar></app-navbar>
-<div style="width: 75%; margin: auto;text-align: center;">
-    <img src="/assets/images/header.png" alt="Nome da imagem">
-</div>
+<header class="bg-dark py-5" style="background-image: url('/assets/images/header.png');">
+</header>
 
-
-<div class="container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Id do Produto</th>
-        <th>Nome do Produto</th>
-        <th>Descrição</th>
-        <th>Preço</th>
-        <th>Ver</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of products$ | async">
-        <td>{{ product.pid }}</td>
-        <td><img class="product" [src]="product.picture" width="70" height="70" alt="product image"></td>
-        <td>{{ product.nome_produto }}</td>
-        <td>{{ product.descricao }}</td>
-        <td>${{ product.preco }}</td>
-        <td>
-          <button class="btn btn-primary" (click)="viewProduct(product.pid)">
-            <i class="bi bi-info-circle"></i> Ver
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+<section class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      <div class="col mb-5" *ngFor="let product of products$ | async">
+        <div class="card h-100">
+          <img class="card-img-top" [src]="product.picture" alt="..." />
+          <div class="card-body p-4">
+            <div class="text-center">
+              <h5 class="fw-bolder">{{ product.nome_produto }}</h5>
+              ${{ product.preco }}
+            </div>
+          </div>
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+              <a class="btn btn-primary mt-auto" href="#" (click)="viewProduct(product.pid)">
+                Adicionar no carrinho
+              </a>
+            </div>
+            <div class="text-center">
+              <a class="btn btn-success mt-auto" href="#" (click)="viewProduct(product.pid)">
+                Visualizar produto
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 

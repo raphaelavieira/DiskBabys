@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { AdminGuard } from './guards/admin.guard';
 import { SobreComponent } from './components/sobre/sobre.component';
 import { ContatoComponent } from './components/contato/contato.component';
+import { ProdutoComponent } from './components/produto/produto.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: "admin", component: AdminComponent, canActivate: [AdminGuard] },
   { path: "cliente", component: ClienteComponent },
   { path: "cadastrar", component: CadastroComponent },
+  { path: "produto", component: ProdutoComponent },
   { path: "sobre", component: SobreComponent },
   { path: "**", redirectTo: "" }
 ];

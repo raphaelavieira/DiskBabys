@@ -18,6 +18,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ProdutoComponent } from './components/produto/produto.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     SobreComponent,
     ContatoComponent,
     FooterComponent,
+    ProdutoComponent,
   ],
   imports: [
     BrowserModule,

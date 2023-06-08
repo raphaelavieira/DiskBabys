@@ -24,7 +24,7 @@ export class CartCrudService {
   fetchAll(id: number): Observable<Cart[]> {
     const url2 = `http://localhost:3000/user/cart/${id}`;
     console.log(url2)
-    return this.http.get<Cart[]>(url2, { responseType: "json" });//.pipe(tap((_)=>console.log("fetched users")));
+    return this.http.get<Cart[]>(url2, { responseType: "json" });
   }
 
   delete(cid: number): Observable<any> {

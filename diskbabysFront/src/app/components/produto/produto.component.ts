@@ -39,7 +39,9 @@ export class ProdutoComponent implements OnInit {
       price: new FormControl(this.currItem$.preco)
     });
   }
-
+  teste(){
+    console.log(this.facilitatorForm.value);
+  }
   post(): void {
     console.log(this.facilitatorForm.value);
     this.cartCrudService.post(this.facilitatorForm.value).subscribe();

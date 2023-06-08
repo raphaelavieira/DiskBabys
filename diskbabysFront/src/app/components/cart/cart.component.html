@@ -1,0 +1,44 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h1 class="text-center">Carrinho</h1>
+
+  <div *ngIf="emptyCartCheck">
+    <button (click)="emptyCart()" class="btn btn-danger mr-2">
+      Limpar Carrinho
+    </button>
+    <button (click)="checkout()" class="btn btn-primary">
+      Checkout
+    </button>
+
+    <table class="table mt-4">
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Nome Produto</th>
+          <th>Preço</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of cartItems$ | async">
+          <td><img class="product" [src]="c.picture" width="70" height="70" /></td>
+          <td>{{c.product_name}}</td>
+          <td>${{c.price.toFixed(2)}}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="delete(c.cid)">
+              <i class="material-icons">Deletar</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="text-center" id="price"></p>
+  </div>
+
+  <div *ngIf="defEmptyCart" class="text-center">
+    <p>Seu carrinho está vazio </p>
+  </div>
+</div>
+

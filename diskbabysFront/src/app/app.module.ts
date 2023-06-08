@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ProdutoComponent } from './components/produto/produto.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ProdutoComponent } from './components/produto/produto.component';
     ContatoComponent,
     FooterComponent,
     ProdutoComponent,
+    CartComponent,
   ],
   imports: [
     BrowserModule,

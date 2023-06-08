@@ -3,6 +3,7 @@ const express = require('express');
 const userController = require('../controllers/user')
 const { authenticateToken } = require('../middlewares/authentication');
 const productController = require('../controllers/product')
+const cartController = require('../controllers/cart')
 
 
 

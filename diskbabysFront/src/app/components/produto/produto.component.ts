@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
@@ -18,7 +19,7 @@ export class ProdutoComponent implements OnInit {
   profilePicture: string;
   imgSrc: string;
 
-  constructor(private cartCrudService: CartCrudService, private router: Router) { }
+  constructor(private cartCrudService: CartCrudService, private router: Router,private titleService: Title) { }
 
   ngOnInit(): void {
     this.currItem$ = JSON.parse(sessionStorage.getItem('currentItem'));
@@ -26,6 +27,7 @@ export class ProdutoComponent implements OnInit {
     this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
     this.profilePicture = this.loggedInUser$.picture;
     this.facilitatorForm = this.createFormGroup();
+    this.titleService.setTitle(this.currItem$.descricao);
   }
 
   createFormGroup(): FormGroup {

@@ -6,6 +6,7 @@ import { switchMap } from 'rxjs/operators';
 import { User } from 'src/app/models/user';
 import { UserListCrudService } from 'src/app/services/user-list-crud.service';
 import { ToastrService } from 'ngx-toastr';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +20,12 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   div1: boolean = false;
 
-  constructor(private userListCrudService: UserListCrudService, private router: Router, private toastr: ToastrService) { }
+  constructor(private userListCrudService: UserListCrudService, private router: Router, private toastr: ToastrService,private titleService: Title) { }
 
   ngOnInit(): void {
     this.checkCurrentUser();
     this.loginForm = this.formLogin();
+    this.titleService.setTitle('Login');
   }
 
   formLogin(): FormGroup {

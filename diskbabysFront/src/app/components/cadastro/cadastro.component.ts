@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
@@ -14,11 +15,12 @@ export class CadastroComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  constructor(private userListCrudService:UserListCrudService,private router: Router,private toastr: ToastrService) { }
+  constructor(private userListCrudService:UserListCrudService,private router: Router,private toastr: ToastrService,private titleService: Title) { }
 
   ngOnInit(): void {
     this.checkCurrentUser();
     this.registerForm = this.registerFormGroup();
+    this.titleService.setTitle('Cadastro');
   }
 
   registerFormGroup():FormGroup{

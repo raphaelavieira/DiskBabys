@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
@@ -28,13 +29,15 @@ export class AdminComponent implements OnInit {
     private router: Router,
     private userListCrudService:UserListCrudService,
     private toastr: ToastrService,
-    private productCrudService: ProductCrudService
+    private productCrudService: ProductCrudService,
+    private titleService: Title
     ) { }
 
   ngOnInit(): void {
     this.users$ = this.userListCrudService.fetchAll();
     this.newProductForm = this.createProductFormGroup();
     this.updateProductForm = this.createUpdateProductFormGroup();
+    this.titleService.setTitle('Adminstrativo DiskBaby');
   }
 
   createFormGroup(user): FormGroup {

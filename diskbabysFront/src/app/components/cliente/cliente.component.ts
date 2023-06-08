@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user';
@@ -16,9 +17,10 @@ export class ClienteComponent implements OnInit {
   profilePicture: string;
   currUser$: User;
 
-  constructor(private userListCrudService: UserListCrudService, private router: Router,private toastr: ToastrService) {
+  constructor(private userListCrudService: UserListCrudService, private router: Router,private toastr: ToastrService,private titleService: Title) {
     this.currUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
+    this.titleService.setTitle('Meu perfil');
   }
 
   ngOnInit(): void {

@@ -25,7 +25,6 @@ export class ProdutoComponent implements OnInit {
     this.currItemPic$ = JSON.parse(sessionStorage.getItem('currentItemPic'));
     this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
     this.profilePicture = this.loggedInUser$.picture;
-    this.productStuff();
     this.facilitatorForm = this.createFormGroup();
   }
 
@@ -47,27 +46,7 @@ export class ProdutoComponent implements OnInit {
     this.router.navigate(["shop"]);
   }
 
-  productStuff(): void {
-    console.log(this.currItem$);
-    // let myContainer = document.getElementById('productInfo') as HTMLElement;
-    //myContainer.innerHTML = "Hello <b>" + this.currItem$.description + "</b> !!!";
-    // myContainer.innerHTML = (`
-    // <div class="flex-container">
-    //   <div class="left">
-    //     <img [src]="'${this.currItem$.picture}'" />
-    //   </div>
-    //   <div class="right">
-    //     <h4 style='text-align:left'>${this.currItem$.product_name}</h4>
-    //     <p>${this.currItem$.description}</p>
-    //     <p>$ ${this.currItem$.price.toFixed(2)} </p>
-    //   </div>
-    // </div>
-    // `);
 
-    this.imgSrc = this.currItem$.foto
-    // let imgGet = document.getElementById("viewItemImg") as HTMLElement;
-    // imgGet.innerHTML = '<img [src]="' + this.currItem$.picture + '" alt="hello"/>'
-  }
 
   cancel(): void {
     sessionStorage.removeItem('currentItem');

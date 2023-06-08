@@ -16,19 +16,19 @@ export class ProductCrudService {
   constructor(private http: HttpClient) { }
 
   fetchAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.url, { responseType: "json" });//.pipe(tap((_)=>console.log("fetched users")));
+    return this.http.get<Product[]>(this.url, { responseType: "json" });
   }
 
   getProduct(pid: Number): Observable<Product> {
     const productItem = `http://localhost:3000/user/shop/${pid}`;
     console.log(productItem)
-    return this.http.get<Product>(productItem, { responseType: "json" });//.pipe(tap((_)=>console.log("fetched users")));
+    return this.http.get<Product>(productItem, { responseType: "json" });
   }
 
   getProductForCart(pid: Number): Observable<Product> {
     const productItem = `http://localhost:3000/user/shop/cart/${pid}`;
     console.log(productItem)
-    return this.http.get<Product>(productItem, { responseType: "json" });//.pipe(tap((_)=>console.log("fetched users")));
+    return this.http.get<Product>(productItem, { responseType: "json" });
   }
 
   private urlProduct = "http://localhost:3000/product";

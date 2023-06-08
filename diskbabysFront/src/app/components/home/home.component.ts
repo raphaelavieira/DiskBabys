@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, of } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { ProductCrudService } from 'src/app/services/product-crud.service';
 
@@ -15,26 +16,40 @@ export class HomeComponent implements OnInit {
   singleItemPic$: Observable<Product>;
   profilePicture: string;
 
-  constructor(private productCrudService: ProductCrudService, private router: Router) {
+  constructor(private productCrudService: ProductCrudService, private router: Router,private toastr: ToastrService) {
 
   }
 
   ngOnInit(): void {
     this.singleItem$ = null;
     this.singleItemPic$ = null;
-    this.products$ = this.productCrudService.fetchAll();
+    this.getAllProducts();
+
   }
+
+  getAllProducts() {
+    this.productCrudService.fetchAll().subscribe(
+      (products: Product[]) => {
+        this.products$ = of(products); // Transforma o array em um Observable
+      },
+      (error) => {
+        this.toastr.error('Erro ao carregar os produtos.', 'Erro');
+        console.log(error);
+      }
+    );
+  }
+
 
   async viewProduct(pid: number): Promise<void> {
     this.singleItem$ = this.productCrudService.getProductForCart(pid);
-    console.log(this.singleItem$);
 
     this.singleItem$.forEach(value => console.log([value][0]));
     try {
       await this.singleItem$.forEach(value => sessionStorage.setItem('currentItem', JSON.stringify([value][0])));
     }
     catch {
-      console.log('error retrieving from db');
+      console.log('Erro no produto');
+      this.toastr.error('Erro no produto, tente novamente mais tarde.', 'Erro');
     }
 
     this.singleItemPic$ = this.productCrudService.getProduct(pid);
@@ -43,7 +58,8 @@ export class HomeComponent implements OnInit {
       await this.singleItemPic$.forEach(value => sessionStorage.setItem('currentItemPic', JSON.stringify([value][0])));
     }
     catch {
-      console.log('error retrieving from db');
+      console.log('Erro na imagem do produto');
+      this.toastr.error('Erro na imagem do produto Por favor, tente novamente mais tarde.', 'Erro');
     }
 
 

@@ -4,15 +4,15 @@ var fs = require('fs');
 var fsp = require('fs').promises;
 
 exports.getAllProducts = async (req, res, next) => {
-    try {
-        const [allProducts] = await Product.fetchAll();
-        for (var product of allProducts) {
-            product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.foto, 'base64');
-        }
-        res.status(200).json(allProducts);
-    } catch {
-        console.log('Error');
-        res.status(500).json({ error: 'Internal Server Error' });
+  try {
+      const [allProducts] = await Product.fetchAll();
+      for (var product of allProducts) {
+          product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.foto, 'base64');
+      }
+      res.status(200).json(allProducts);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
     }
 };
 
@@ -29,7 +29,7 @@ exports.getProduct = async (req, res, next) => {
       }
       if (prod.length > 0) { 
           res.status(202).json(prod[0]);
-          console.log('success getProduct');
+          console.log('Sucess');
       }
       else {
           res.status(404).json(prod[0]);

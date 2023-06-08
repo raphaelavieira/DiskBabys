@@ -11,23 +11,29 @@
           <div class="card-body p-4">
             <div class="text-center">
               <h5 class="fw-bolder">{{ product.nome_produto }}</h5>
-              ${{ product.preco }}
+              ${{ product.preco.toFixed(2) }}
             </div>
           </div>
-          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+          <div class="card-footer p-3  bg-transparent">
             <div class="text-center">
-              <a class="btn btn-primary mt-auto" href="#" (click)="viewProduct(product.pid)">
-                Adicionar no carrinho
+              <a class="btn btn-success "  (click)="viewProduct(product.pid)">
+                Visualizar produto
               </a>
             </div>
+          </div>
+          <div class="card-footer p-3  bg-transparent">
             <div class="text-center">
-              <a class="btn btn-success mt-auto" href="#" (click)="viewProduct(product.pid)">
-                Visualizar produto
+              <a class="btn btn-primary "  (click)="viewProduct(product.pid)">
+                Adicionar no carrinho
               </a>
             </div>
           </div>
         </div>
       </div>
+      <div class="text-center" *ngIf="(products$ | async)?.length === 0">
+        <p>Nenhum produto cadastrado</p>
+      </div>
+
     </div>
   </div>
 </section>

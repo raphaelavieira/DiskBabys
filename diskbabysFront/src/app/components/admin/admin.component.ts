@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
 import { ProductCrudService } from 'src/app/services/product-crud.service';
@@ -34,7 +34,6 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.users$ = this.userListCrudService.fetchAll();
     this.newProductForm = this.createProductFormGroup();
-    this.products$ = this.productCrudService.fetchAll();
     this.updateProductForm = this.createUpdateProductFormGroup();
   }
 
@@ -138,15 +137,26 @@ export class AdminComponent implements OnInit {
       this.currentPage = 'listar-clientes'
     } else if (page === 'listar-pedidos') {
       this.currentPage = 'listar-pedidos'
-
     } else if (page === 'atualizar-produto') {
       this.currentPage = 'atualizar-produto'
+      this.getAllProducts();
 
     } else if (page === 'adicionar-produto') {
       this.currentPage = 'adicionar-produto'
     }
   }
 
+  getAllProducts() {
+    this.productCrudService.fetchAll().subscribe(
+      (products: Product[]) => {
+        this.products$ = of(products); // Transforma o array em um Observable
+      },
+      (error) => {
+        this.toastr.error('Erro ao carregar os produtos.', 'Erro');
+        console.log(error);
+      }
+    );
+  }
 
   postProduct() {
     let inpOne = this.newProductForm.controls['product_name'].value.trim();
@@ -157,6 +167,7 @@ export class AdminComponent implements OnInit {
     this.productCrudService.postProduct(this.newProductForm.value).subscribe(
       (response) => {
         if (response.status) {
+          this.newProductForm.reset();
           this.toastr.success(response.message, 'Sucesso');
         } else {
           this.toastr.error(response.message, 'Erro');

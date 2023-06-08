@@ -23,6 +23,13 @@ router.get('/user/shop/cart/:pid', productController.getProductForCart)
 router.post('/product', authenticateToken,  productController.addProduct)
 router.delete('/product/:pid', authenticateToken, productController.deleteProduct)
 router.put('/product', authenticateToken, productController.putProduct)
+//Rotas do carrinho
+router.get('/user/cart/:id', cartController.getCart)
+router.post('/user/cart', cartController.addToCart)
+router.delete('/user/cart/:cid', cartController.deleteCartItem)
+router.delete('/user/cart/clear/:id', cartController.deleteAllCartItems)
+router.get('/user/cart/items/:id', cartController.numItem)
+router.get('/user/cart/price/:id', cartController.totalPrice)
 
 
 module.exports = router;

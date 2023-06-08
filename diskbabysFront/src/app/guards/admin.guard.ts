@@ -12,7 +12,7 @@ export class AdminGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
       if (currentUser && currentUser.role === 'admin') {
         return true;
       }

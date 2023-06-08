@@ -116,16 +116,16 @@ export class AdminComponent implements OnInit {
 
 
   Logout(){
-    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(['home']);
     this.toastr.success(' Logout  realizado com sucesso');
   }
 
   delete(id:number):void{
     this.userListCrudService.delete(id).subscribe();
-    var loggedInUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    var loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
     if(loggedInUser.id==id){
-      sessionStorage.removeItem('currentUser');
+      localStorage.removeItem('currentUser');
       this.router.navigate([""]);
     }
     else{

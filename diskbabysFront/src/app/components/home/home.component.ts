@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
     this.singleItem$ = this.productCrudService.getProductForCart(pid);
 
     try {
-      await this.singleItem$.forEach(value => sessionStorage.setItem('currentItem', JSON.stringify([value][0])));
+      await this.singleItem$.forEach(value => localStorage.setItem('currentItem', JSON.stringify([value][0])));
     }
     catch {
       console.log('Erro no produto');
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
 
     this.singleItemPic$ = this.productCrudService.getProduct(pid);
     try {
-      await this.singleItemPic$.forEach(value => sessionStorage.setItem('currentItemPic', JSON.stringify([value][0])));
+      await this.singleItemPic$.forEach(value => localStorage.setItem('currentItemPic', JSON.stringify([value][0])));
     }
     catch {
       console.log('Erro na imagem do produto');

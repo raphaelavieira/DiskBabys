@@ -23,10 +23,10 @@ export class ProdutoComponent implements OnInit {
   constructor(private cartCrudService: CartCrudService, private router: Router,private titleService: Title,private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    this.currItem$ = JSON.parse(sessionStorage.getItem('currentItem'));
-    this.currItemPic$ = JSON.parse(sessionStorage.getItem('currentItemPic'));
-    if(sessionStorage.getItem('currentUser')){
-      this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.currItem$ = JSON.parse(localStorage.getItem('currentItem'));
+    this.currItemPic$ = JSON.parse(localStorage.getItem('currentItemPic'));
+    if(localStorage.getItem('currentUser')){
+      this.loggedInUser$ = JSON.parse(localStorage.getItem('currentUser'));
       this.profilePicture = this.loggedInUser$.picture;
     }
     this.facilitatorForm = this.createFormGroup();
@@ -47,8 +47,8 @@ export class ProdutoComponent implements OnInit {
     if (this.loggedInUser$) {
       this.cartCrudService.post(this.facilitatorForm.value).subscribe(
         () => {
-          sessionStorage.removeItem('currentItem');
-          sessionStorage.removeItem('currentItemPic');
+          localStorage.removeItem('currentItem');
+          localStorage.removeItem('currentItemPic');
           this.router.navigate(['cart']);
         },
         () => {
@@ -65,8 +65,8 @@ export class ProdutoComponent implements OnInit {
 
 
   cancel(): void {
-    sessionStorage.removeItem('currentItem');
-    sessionStorage.removeItem('currentItemPic');
+    localStorage.removeItem('currentItem');
+    localStorage.removeItem('currentItemPic');
     this.router.navigate(["shop"]);
   }
 

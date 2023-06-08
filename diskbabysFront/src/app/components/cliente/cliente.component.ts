@@ -18,13 +18,13 @@ export class ClienteComponent implements OnInit {
   currUser$: User;
 
   constructor(private userListCrudService: UserListCrudService, private router: Router,private toastr: ToastrService,private titleService: Title) {
-    this.currUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.currUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
     this.titleService.setTitle('Meu perfil');
   }
 
   ngOnInit(): void {
-    this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.loggedInUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.updateUserForm = this.createFormGroup();
     this.profilePicture = this.loggedInUser$.picture;
   }
@@ -48,7 +48,7 @@ export class ClienteComponent implements OnInit {
       response => {
         if (response && response.status === true) {
           this.toastr.success('Conta deletada com sucesso');
-          sessionStorage.clear();
+          localStorage.clear();
           this.router.navigate([""]);
         } else {
           this.toastr.error(response.message || 'Erro ao excluir usuário. Por favor, tente novamente mais tarde.', 'Erro');
@@ -80,7 +80,7 @@ export class ClienteComponent implements OnInit {
         console.log(response.status);
         if (response && response.status === true) {
           this.toastr.success('Dados atualizados com sucesso!', 'Sucesso');
-          sessionStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser', JSON.stringify(user));
           window.location.reload();
           } else if (response && response.status === false) {
           this.toastr.error(response.message || 'Erro ao atualizar cadastro. Por favor, tente novamente mais tarde.', 'Erro');

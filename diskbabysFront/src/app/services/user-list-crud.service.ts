@@ -16,7 +16,7 @@ export class UserListCrudService {
   httpOptions: { headers: HttpHeaders };
 
   constructor(private http: HttpClient) {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

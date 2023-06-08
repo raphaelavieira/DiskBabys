@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   checkCurrentUser(): void {
-    const currentUser = sessionStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
       const user = JSON.parse(currentUser) as User;
 
@@ -62,8 +62,8 @@ export class LoginComponent implements OnInit {
       const user = response.user;
       const token = response.token;
       console.log(response)
-      sessionStorage.setItem('currentUser', JSON.stringify(user));
-      sessionStorage.setItem('token', token);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('token', token);
       this.toastr.success('Login realizado com sucesso !');
 
       if (user.role.toLowerCase() == 'admin') {

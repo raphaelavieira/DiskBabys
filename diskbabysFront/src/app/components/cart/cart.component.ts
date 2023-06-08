@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   profilePicture: string;
 
   constructor(private cartCrudService: CartCrudService, private router: Router, private toastr: ToastrService,private titleService: Title) {
-    this.currUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.currUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
   }
 
@@ -33,7 +33,7 @@ export class CartComponent implements OnInit {
   }
 
   deleteSessionUserInfo(): void {
-    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser');
   }
 
   delete(cid: number): void {
@@ -68,13 +68,13 @@ export class CartComponent implements OnInit {
 
   async showCart() {
     try {
-      await this.itemCount$.forEach(value => sessionStorage.setItem('records', JSON.stringify([value][0])));
+      await this.itemCount$.forEach(value => localStorage.setItem('records', JSON.stringify([value][0])));
     }
     catch {
       console.log('Error');
     }
 
-    var records = JSON.parse(sessionStorage.getItem('records'));
+    var records = JSON.parse(localStorage.getItem('records'));
     if (records == 0) {
       this.emptyCartCheck = false;
       this.defEmptyCart = true;
@@ -88,13 +88,13 @@ export class CartComponent implements OnInit {
 
   async total(): Promise<void> {
     try {
-      await this.price$.forEach(value => sessionStorage.setItem('price', JSON.stringify([value][0].toFixed(2))));
+      await this.price$.forEach(value => localStorage.setItem('price', JSON.stringify([value][0].toFixed(2))));
     }
     catch {
       console.log('error');
     }
 
-    var total = JSON.parse(sessionStorage.getItem('price'));console.log(total)
+    var total = JSON.parse(localStorage.getItem('price'));console.log(total)
     let myContainer = document.getElementById('price') as HTMLElement;
     myContainer.innerHTML = " Total: <b>$" + total + "</b>";
   }

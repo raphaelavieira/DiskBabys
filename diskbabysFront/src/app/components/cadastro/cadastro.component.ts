@@ -36,7 +36,7 @@ export class CadastroComponent implements OnInit {
   }
 
   checkCurrentUser(): void {
-    const currentUser = sessionStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
       const user = JSON.parse(currentUser) as User;
 

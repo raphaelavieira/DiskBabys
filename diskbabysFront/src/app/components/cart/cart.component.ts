@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -18,8 +20,11 @@ export class CartComponent implements OnInit {
   price$: Observable<any>;
   currUser$: User;
   profilePicture: string;
+  finalize: boolean = false;
+  totalOrder: number = 0
+  deliveryForm: FormGroup;
 
-  constructor(private cartCrudService: CartCrudService, private router: Router, private toastr: ToastrService,private titleService: Title) {
+  constructor(private cartCrudService: CartCrudService, private router: Router, private toastr: ToastrService,private titleService: Title,private http: HttpClient) {
     this.currUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
   }
@@ -30,8 +35,49 @@ export class CartComponent implements OnInit {
     this.price$ = this.cartCrudService.getPrice(this.currUser$.id)
     this.showCart();
     this.titleService.setTitle("Carrinho");
+    this.deliveryForm = new FormGroup({
+      cep: new FormControl('', Validators.required),
+      rua: new FormControl('', Validators.required),
+      bairro: new FormControl('', Validators.required),
+      cidade: new FormControl('', Validators.required),
+      estado: new FormControl('', Validators.required),
+      numero: new FormControl('', Validators.required),
+      formaPagamento: new FormControl('', Validators.required)
+    });
+
   }
 
+  consult(cep: string): void {
+    if (!cep) {
+      return;
+    }
+    try {
+      const urlViacep = `https://viacep.com.br/ws/${cep}/json/`;
+      this.http.get(urlViacep).subscribe(
+        (res: any) => {
+          if (res.erro) {
+            this.deliveryForm.patchValue({ cep: '' });
+            return;
+          }
+
+          this.deliveryForm.patchValue({
+            cep: cep,
+            rua: res.logradouro,
+            bairro: res.bairro,
+            cidade: res.localidade,
+            estado: res.uf
+          });
+        },
+        (error) => {
+          console.log(error);
+          this.toastr.error('Erro ao consultar CEP', 'Erro');
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      this.toastr.error('Erro ao consultar CEP', 'Erro');
+    }
+  }
 
 
   delete(cid: number): void {
@@ -52,8 +98,11 @@ export class CartComponent implements OnInit {
   }
 
   checkout(): void {
-    //console.log("hello");
-    this.router.navigate(["checkout"]);
+    this.finalize = true;
+  }
+
+  goCart(): void {
+    this.finalize = false;
   }
 
   emptyCart(): void {
@@ -94,9 +143,46 @@ export class CartComponent implements OnInit {
       console.log('error');
     }
 
-    var total = JSON.parse(localStorage.getItem('price'));console.log(total)
-    let myContainer = document.getElementById('price') as HTMLElement;
-    myContainer.innerHTML = " Total: <b>$" + total + "</b>";
+    this.totalOrder = JSON.parse(localStorage.getItem('price'));
   }
+
+  checkoutOrder(): void {
+    if (this.deliveryForm.invalid) {
+      this.toastr.error('Por favor, preencha todos os campos', 'Erro');
+      return;
+    }
+
+    const order = {
+      id: this.currUser$.id,
+      preco_total: this.totalOrder,
+      forma_pagamento: this.deliveryForm.value.formaPagamento,
+      cep: this.deliveryForm.value.cep,
+      rua: this.deliveryForm.value.rua,
+      bairro: this.deliveryForm.value.bairro,
+      cidade: this.deliveryForm.value.cidade,
+      estado: this.deliveryForm.value.estado,
+      numero: this.deliveryForm.value.numero
+    };
+
+    this.cartCrudService.postOrder(order).subscribe(
+      () => {
+        this.toastr.success('Pedido enviado com sucesso', 'Sucesso');
+        // Redirecionar para a página de sucesso do pedido ou outra página, se necessário
+        this.cartCrudService.deleteAll(this.currUser$.id).subscribe();
+         this.router.navigate(['/success']);
+      },
+      (error) => {
+        if (error && error.error && error.error.message) {
+          this.toastr.error(error.error, 'Erro');
+        } else {
+          console.log(error);
+          this.toastr.error('Erro ao enviar o pedido', 'Erro');
+        }
+      }
+    );
+  }
+
+
+
 
 }

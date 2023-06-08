@@ -22,6 +22,10 @@ module.exports = class Cart {
         return db.execute('Insert into cart (id, pid, nome_produto, foto, preco) Values (?,?,?,?,?)', [item.id, item.pid, item.product_name, item.picture, item.price]);
     }
 
+    static postOrder(Order) {
+        return db.execute('INSERT INTO pedido (id, preco_total, forma_pagamento, cep, rua, bairro, cidade, estado, numero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Order.id, Order.preco_total, Order.forma_pagamento, Order.cep, Order.rua, Order.bairro, Order.cidade, Order.estado, Order.numero]);
+    }
+
     static delete(cid) {
         return db.execute('delete from cart where cid = ?', [cid]);
     }

@@ -20,6 +20,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ProdutoComponent } from './components/produto/produto.component';
 import { CartComponent } from './components/cart/cart.component';
+import { SuccessComponent } from './components/success/success.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CartComponent } from './components/cart/cart.component';
     FooterComponent,
     ProdutoComponent,
     CartComponent,
+    SuccessComponent,
   ],
   imports: [
     BrowserModule,

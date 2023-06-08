@@ -31,6 +31,8 @@ router.delete('/user/cart/:cid', cartController.deleteCartItem)
 router.delete('/user/cart/clear/:id', cartController.deleteAllCartItems)
 router.get('/user/cart/items/:id', cartController.numItem)
 router.get('/user/cart/price/:id', cartController.totalPrice)
+router.post('/user/order', cartController.addToOrder)
+
 
 
 module.exports = router;

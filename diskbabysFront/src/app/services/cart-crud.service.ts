@@ -28,13 +28,13 @@ export class CartCrudService {
   }
 
   delete(cid: number): Observable<any> {
-    const urlthree = `http://localhost:3000/user/cart/${cid}`;
-    return this.http.delete<Cart>(urlthree, this.httpOptions);
+    const url3 = `http://localhost:3000/user/cart/${cid}`;
+    return this.http.delete<Cart>(url3, this.httpOptions);
   }
 
   deleteAll(id: number): Observable<any> {
-    const urlthree = `http://localhost:3000/user/cart/clear/${id}`;
-    return this.http.delete<Cart>(urlthree, this.httpOptions);
+    const url3 = `http://localhost:3000/user/cart/clear/${id}`;
+    return this.http.delete<Cart>(url3, this.httpOptions);
   }
 
   getCount(id: number): Observable<any> {
@@ -45,4 +45,11 @@ export class CartCrudService {
   getPrice(id: number): Observable<any> {
     const url5 = `http://localhost:3000/user/cart/price/${id}`;
     return this.http.get<any>(url5, { responseType: "json" });
-  }}
+  }
+
+  postOrder(order: any): Observable<any> {
+    const url = "http://localhost:3000/user/order";
+    return this.http.post(url, order, this.httpOptions).pipe(first());
+  }
+
+}

@@ -101,5 +101,40 @@ exports.totalPrice = async (req, res, next) => {
     } catch {
         console.log('Error');
     }
-
 };
+
+exports.addToOrder = async (req, res, next) => {
+    const id = req.body.id;
+    const preco_total = req.body.preco_total;
+    const forma_pagamento = req.body.forma_pagamento;
+    const cep = req.body.cep;
+    const rua = req.body.rua;
+    const bairro = req.body.bairro;
+    const cidade = req.body.cidade;
+    const estado = req.body.estado;
+    const numero = req.body.numero;
+  
+    if (!id || !preco_total || !forma_pagamento || !cep || !rua || !bairro || !cidade || !estado || !numero) {
+      return res.status(400).json({ error: 'Campos obrigatórios estão em branco' });
+    }
+  
+    try {
+      const orderDetails = {
+        id: id,
+        preco_total: preco_total,
+        forma_pagamento: forma_pagamento,
+        cep: cep,
+        rua: rua,
+        bairro: bairro,
+        cidade: cidade,
+        estado: estado,
+        numero: numero
+      };
+  
+      const postUser = await Cart.postOrder(orderDetails);
+      res.status(201).json({ message: 'Pedido adicionado' });
+    } catch {
+      console.log('Erro');
+    }
+  };
+  

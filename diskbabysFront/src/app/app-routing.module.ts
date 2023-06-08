@@ -11,6 +11,7 @@ import { ContatoComponent } from './components/contato/contato.component';
 import { ProdutoComponent } from './components/produto/produto.component';
 import { CartComponent } from './components/cart/cart.component';
 import { AuthGuard } from './guards/AuthGuard';
+import { SuccessComponent } from './components/success/success.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: "admin", component: AdminComponent, canActivate: [AdminGuard] },
   { path: "cliente", component: ClienteComponent, canActivate: [AuthGuard] },
   { path: "cadastrar", component: CadastroComponent },
-  { path: "produto", component: ProdutoComponent,  },
+  { path: "produto", component: ProdutoComponent  },
+  { path: "success", component: SuccessComponent,  },
   { path: "sobre", component: SobreComponent },
   { path: "cart", component: CartComponent,canActivate: [AuthGuard] },
   { path: "**", redirectTo: "" }

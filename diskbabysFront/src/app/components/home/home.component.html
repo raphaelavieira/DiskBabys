@@ -21,13 +21,6 @@
               </a>
             </div>
           </div>
-          <div class="card-footer p-3  bg-transparent">
-            <div class="text-center">
-              <a class="btn btn-primary "  (click)="viewProduct(product.pid)">
-                Adicionar no carrinho
-              </a>
-            </div>
-          </div>
         </div>
       </div>
       <div class="text-center" *ngIf="(products$ | async)?.length === 0">

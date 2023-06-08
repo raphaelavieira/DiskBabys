@@ -10,15 +10,16 @@ import { SobreComponent } from './components/sobre/sobre.component';
 import { ContatoComponent } from './components/contato/contato.component';
 import { ProdutoComponent } from './components/produto/produto.component';
 import { CartComponent } from './components/cart/cart.component';
+import { AuthGuard } from './guards/AuthGuard';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "login", component: LoginComponent, },
   { path: "contato", component: ContatoComponent },
   { path: "admin", component: AdminComponent, canActivate: [AdminGuard] },
-  { path: "cliente", component: ClienteComponent },
+  { path: "cliente", component: ClienteComponent, canActivate: [AuthGuard] },
   { path: "cadastrar", component: CadastroComponent },
-  { path: "produto", component: ProdutoComponent },
+  { path: "produto", component: ProdutoComponent,  },
   { path: "sobre", component: SobreComponent },
   { path: "cart", component: CartComponent },
   { path: "**", redirectTo: "" }

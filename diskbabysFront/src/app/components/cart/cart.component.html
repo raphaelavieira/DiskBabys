@@ -8,7 +8,7 @@
       Limpar Carrinho
     </button>
     <button (click)="checkout()" class="btn btn-primary">
-      Checkout
+      Finalizar compra
     </button>
 
     <table class="table mt-4">
@@ -23,8 +23,8 @@
       <tbody>
         <tr *ngFor="let c of cartItems$ | async">
           <td><img class="product" [src]="c.picture" width="70" height="70" /></td>
-          <td>{{c.product_name}}</td>
-          <td>${{c.price.toFixed(2)}}</td>
+          <td>{{c.nome_produto}}</td>
+          <td>${{c.preco.toFixed(2)}}</td>
           <td>
             <button class="btn btn-danger btn-sm" (click)="delete(c.cid)">
               <i class="material-icons">Deletar</i>

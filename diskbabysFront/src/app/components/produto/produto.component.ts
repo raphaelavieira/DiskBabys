@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
 import { CartCrudService } from 'src/app/services/cart-crud.service';
@@ -19,13 +20,15 @@ export class ProdutoComponent implements OnInit {
   profilePicture: string;
   imgSrc: string;
 
-  constructor(private cartCrudService: CartCrudService, private router: Router,private titleService: Title) { }
+  constructor(private cartCrudService: CartCrudService, private router: Router,private titleService: Title,private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.currItem$ = JSON.parse(sessionStorage.getItem('currentItem'));
     this.currItemPic$ = JSON.parse(sessionStorage.getItem('currentItemPic'));
-    this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
-    this.profilePicture = this.loggedInUser$.picture;
+    if(sessionStorage.getItem('currentUser')){
+      this.loggedInUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
+      this.profilePicture = this.loggedInUser$.picture;
+    }
     this.facilitatorForm = this.createFormGroup();
     this.titleService.setTitle(this.currItem$.descricao);
   }
@@ -39,16 +42,25 @@ export class ProdutoComponent implements OnInit {
       price: new FormControl(this.currItem$.preco)
     });
   }
-  teste(){
-    console.log(this.facilitatorForm.value);
-  }
+
   post(): void {
-    console.log(this.facilitatorForm.value);
-    this.cartCrudService.post(this.facilitatorForm.value).subscribe();
-    sessionStorage.removeItem('currentItem');
-    sessionStorage.removeItem('currentItemPic');
-    this.router.navigate(["shop"]);
+    if (this.loggedInUser$) {
+      this.cartCrudService.post(this.facilitatorForm.value).subscribe(
+        () => {
+          sessionStorage.removeItem('currentItem');
+          sessionStorage.removeItem('currentItemPic');
+          this.router.navigate(['cart']);
+        },
+        () => {
+          this.toastr.error('Erro ao adicionar produto ao carrinho.', 'Erro');
+        }
+      );
+    } else {
+      this.toastr.warning('Para adicionar um produto ao carrinho, é necessário estar logado.', 'Atenção');
+      this.router.navigate(['login']);
+    }
   }
+
 
 
 
@@ -59,8 +71,5 @@ export class ProdutoComponent implements OnInit {
   }
 
 
-  addToCart(): void {
-    console.log(this.currItem$);
-  }
 
 }

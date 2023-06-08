@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
     this.singleItem$ = null;
     this.singleItemPic$ = null;
     this.getAllProducts();
-
   }
 
   getAllProducts() {
@@ -43,7 +42,6 @@ export class HomeComponent implements OnInit {
   async viewProduct(pid: number): Promise<void> {
     this.singleItem$ = this.productCrudService.getProductForCart(pid);
 
-    this.singleItem$.forEach(value => console.log([value][0]));
     try {
       await this.singleItem$.forEach(value => sessionStorage.setItem('currentItem', JSON.stringify([value][0])));
     }
@@ -53,7 +51,6 @@ export class HomeComponent implements OnInit {
     }
 
     this.singleItemPic$ = this.productCrudService.getProduct(pid);
-    this.singleItemPic$.forEach(value => console.log([value][0]));
     try {
       await this.singleItemPic$.forEach(value => sessionStorage.setItem('currentItemPic', JSON.stringify([value][0])));
     }

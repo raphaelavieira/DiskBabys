@@ -12,7 +12,7 @@ exports.getCart = async (req, res, next) => {
         };
         const [prod] = await Cart.fetchAll(cartDetails);
         for (var product of prod) {
-            product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.picture, 'base64');
+            product.picture = "data:image/jpeg;base64," + await fsp.readFile("../diskBabysBack/assets/products/" + product.foto, 'base64');
         }
         if (prod.length > 0) { 
             res.status(202).json(prod);
@@ -54,12 +54,14 @@ exports.addToCart = async (req, res, next) => {
 
 exports.deleteCartItem = async (req, res, next) => {
     try {
-        const deleteResponse = await Cart.delete(req.params.cid);
-        res.status(200).json(deleteResponse);
-    } catch {
-        console.log('Error');
+      const deleteResponse = await Cart.delete(req.params.cid);
+      res.status(200).json({ status: true, message: "Carrinho deletado" });
+    } catch (error) {
+      console.log(error);
+      res.status(200).json({ status: false, message: "Falha ao deletar carrinho" });
     }
-};
+  };
+  
 
 exports.deleteAllCartItems = async (req, res, next) => {
     try {

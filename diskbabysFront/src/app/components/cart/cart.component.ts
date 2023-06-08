@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Cart } from 'src/app/models/cart';
 import { User } from 'src/app/models/user';
@@ -17,7 +19,7 @@ export class CartComponent implements OnInit {
   currUser$: User;
   profilePicture: string;
 
-  constructor(private cartCrudService: CartCrudService, private router: Router) {
+  constructor(private cartCrudService: CartCrudService, private router: Router, private toastr: ToastrService,private titleService: Title) {
     this.currUser$ = JSON.parse(sessionStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
   }
@@ -27,6 +29,7 @@ export class CartComponent implements OnInit {
     this.itemCount$ = this.cartCrudService.getCount(this.currUser$.id)
     this.price$ = this.cartCrudService.getPrice(this.currUser$.id)
     this.showCart();
+    this.titleService.setTitle("Carrinho");
   }
 
   deleteSessionUserInfo(): void {
@@ -34,8 +37,19 @@ export class CartComponent implements OnInit {
   }
 
   delete(cid: number): void {
-    this.cartCrudService.delete(cid).subscribe();
-    window.location.reload();
+    this.cartCrudService.delete(cid).subscribe(
+      (response: any) => {
+        if (response && response.status) {
+          this.toastr.success(response.message, 'Sucesso');
+        } else {
+          this.toastr.error(response.message, 'Erro');
+        }
+      },
+      (error) => {
+        this.toastr.error('Erro interno no servidor', 'Erro');
+        console.error(error);
+      }
+    );
   }
 
   checkout(): void {
@@ -57,7 +71,7 @@ export class CartComponent implements OnInit {
       await this.itemCount$.forEach(value => sessionStorage.setItem('records', JSON.stringify([value][0])));
     }
     catch {
-      console.log('error retrieving from db');
+      console.log('Error');
     }
 
     var records = JSON.parse(sessionStorage.getItem('records'));

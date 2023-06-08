@@ -35,6 +35,6 @@ module.exports = class Cart {
     }
 
     static cartTotalPrice(idOfLoggedInUser) {
-        return db.execute('select sum(price) as total from cart where id = ?', [idOfLoggedInUser.id]);
+        return db.execute('select sum(preco) as total from cart where id = ?', [idOfLoggedInUser.id]);
     }
 };

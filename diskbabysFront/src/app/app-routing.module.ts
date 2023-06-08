@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: "cadastrar", component: CadastroComponent },
   { path: "produto", component: ProdutoComponent,  },
   { path: "sobre", component: SobreComponent },
-  { path: "cart", component: CartComponent },
+  { path: "cart", component: CartComponent,canActivate: [AuthGuard] },
   { path: "**", redirectTo: "" }
 ];
 

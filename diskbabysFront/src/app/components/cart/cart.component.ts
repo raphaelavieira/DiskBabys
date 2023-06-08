@@ -32,9 +32,7 @@ export class CartComponent implements OnInit {
     this.titleService.setTitle("Carrinho");
   }
 
-  deleteSessionUserInfo(): void {
-    localStorage.removeItem('currentUser');
-  }
+
 
   delete(cid: number): void {
     this.cartCrudService.delete(cid).subscribe(
@@ -50,6 +48,7 @@ export class CartComponent implements OnInit {
         console.error(error);
       }
     );
+    window.location.reload();
   }
 
   checkout(): void {
@@ -59,8 +58,8 @@ export class CartComponent implements OnInit {
 
   emptyCart(): void {
     this.cartCrudService.deleteAll(this.currUser$.id).subscribe();
+    this.toastr.success('Carrinho limpo com sucesso', 'Sucesso');
     window.location.reload();
-    //console.log("clear");
   }
 
   emptyCartCheck: boolean = false;
@@ -87,6 +86,7 @@ export class CartComponent implements OnInit {
   }
 
   async total(): Promise<void> {
+
     try {
       await this.price$.forEach(value => localStorage.setItem('price', JSON.stringify([value][0].toFixed(2))));
     }

@@ -4,6 +4,7 @@ const userController = require('../controllers/user')
 const { authenticateToken } = require('../middlewares/authentication');
 const productController = require('../controllers/product')
 const cartController = require('../controllers/cart')
+const orderController = require('../controllers/order')
 
 
 
@@ -32,6 +33,8 @@ router.delete('/user/cart/clear/:id', cartController.deleteAllCartItems)
 router.get('/user/cart/items/:id', cartController.numItem)
 router.get('/user/cart/price/:id', cartController.totalPrice)
 router.post('/user/order', cartController.addToOrder)
+//Rotas do pedido
+router.get('/order/requests', orderController.getAllRequets)
 
 
 

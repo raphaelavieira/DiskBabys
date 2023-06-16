@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
+import { OrderService } from 'src/app/services/order.service';
 import { ProductCrudService } from 'src/app/services/product-crud.service';
 import { UserListCrudService } from 'src/app/services/user-list-crud.service';
 
@@ -18,6 +19,7 @@ export class AdminComponent implements OnInit {
   updateUserForm: FormGroup;
   showModal: boolean = false;
   users$:Observable<User[]>;
+  requests:Observable<Pedidos[]>;
   currentPage: string = 'listar-clientes';
   newProductForm: FormGroup;
   updateProductForm: FormGroup;
@@ -28,6 +30,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private router: Router,
     private userListCrudService:UserListCrudService,
+    private orderService: OrderService,
     private toastr: ToastrService,
     private productCrudService: ProductCrudService,
     private titleService: Title
@@ -140,19 +143,32 @@ export class AdminComponent implements OnInit {
       this.currentPage = 'listar-clientes'
     } else if (page === 'listar-pedidos') {
       this.currentPage = 'listar-pedidos'
+      this.getAllRequests();
     } else if (page === 'atualizar-produto') {
       this.currentPage = 'atualizar-produto'
       this.getAllProducts();
-
     } else if (page === 'adicionar-produto') {
       this.currentPage = 'adicionar-produto'
     }
   }
 
+
+  getAllRequests(){
+    this.orderService.fetchAll().subscribe(
+      (requests: Pedidos[]) => {
+        this.requests = of(requests);
+      },
+      (error) => {
+        this.toastr.error('Erro ao carregar os produtos.', 'Erro');
+        console.log(error);
+      }
+    );
+  }
+
   getAllProducts() {
     this.productCrudService.fetchAll().subscribe(
       (products: Product[]) => {
-        this.products$ = of(products); // Transforma o array em um Observable
+        this.products$ = of(products);
       },
       (error) => {
         this.toastr.error('Erro ao carregar os produtos.', 'Erro');

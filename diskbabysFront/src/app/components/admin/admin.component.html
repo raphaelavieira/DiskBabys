@@ -39,7 +39,7 @@
                 </div>
               </div>
               <div class="col-lg-8 col-md-8 col-12">
-                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }}</strong></h4>
+                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }} ID: {{user.id}}</strong></h4>
                 <span class="job_post">{{ user.email }}</span>
                 <p>{{ user.address }}</p>
                 <div>
@@ -58,6 +58,44 @@
     <p>Nenhum usuário cadastrado.</p>
   </ng-template>
 </div>
+
+<div class="container profile-page" *ngIf="currentPage === 'listar-pedidos'">
+  <div class="container">
+    <h1>Pedidos</h1>
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Ordem ID</th>
+            <th>ID do Cliente</th>
+            <th>Preço Total</th>
+            <th>Forma de Pagamento</th>
+            <th>Data</th>
+            <th>Endereço</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="(requests | async)?.length; else noOrders">
+            <tr *ngFor="let order of requests | async">
+              <td>{{ order.oid }}</td>
+              <td>{{ order.id }}</td>
+              <td>R$ {{ order.preco_total.toFixed(2) }}</td>
+              <td>{{ order.forma_pagamento }}</td>
+              <td>{{ order.date | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ order.rua }}, {{ order.numero }}, {{ order.bairro }}, {{ order.cidade }}, {{ order.estado }}, CEP: {{ order.cep }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noOrders>
+      <p>Nenhum pedido cadastrado.</p>
+    </ng-template>
+  </div>
+</div>
+
 
 
 <div class="modal fade" id="atualizarModal" tabindex="-1" role="dialog" aria-labelledby="atualizarModalLabel" aria-hidden="true" *ngIf="showModal &&  currentPage === 'listar-clientes'" >

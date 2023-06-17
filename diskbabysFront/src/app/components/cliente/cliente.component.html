@@ -8,13 +8,13 @@
           <div class="card-body text-center">
             <img [src]="profilePicture" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
             <h5 class="my-3">{{this.loggedInUser$.name}}</h5>
-            <p class="text-muted mb-1">Cliente Diskbabys</p>
+            <p class="text-muted mb-1"><i class="fas fa-user"></i> Cliente Diskbabys</p>
             <p class="text-muted mb-4">{{this.loggedInUser$.address}}</p>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-danger" (click)="delete()">Excluir conta</button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ><i class="fas fa-trash"></i> Excluir conta</button>
             </div>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#atualizarModal">Atualizar cadastro</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#atualizarModal"><i class="fas fa-edit"></i> Atualizar cadastro</button>
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Nome</p>
+                <p class="mb-0"><i class="fas fa-user"></i> Nome</p>
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0">{{this.loggedInUser$.name}}</p>
@@ -33,7 +33,7 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Email</p>
+                <p class="mb-0"><i class="fas fa-envelope"></i> Email</p>
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0">{{this.loggedInUser$.email}}</p>
@@ -42,7 +42,7 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Telefone</p>
+                <p class="mb-0"><i class="fas fa-phone"></i> Telefone</p>
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0">{{this.loggedInUser$.phone}}</p>
@@ -51,7 +51,7 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Endereço</p>
+                <p class="mb-0"><i class="fas fa-map-marker-alt"></i> Endereço</p>
               </div>
               <div class="col-sm-9">
                 <p class="text-muted mb-0">{{this.loggedInUser$.address}}</p>
@@ -60,7 +60,7 @@
             <hr>
             <div class="row">
               <div class="col-sm-12">
-                <h5 class="card-title">Pedidos</h5>
+                <h5 class="card-title"><i class="fas fa-clipboard-list"></i> Pedidos</h5>
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
@@ -91,15 +91,33 @@
   </div>
 </section>
 
-
-
 <app-footer></app-footer>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal">Deseja deletar a sua conta?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja realmente excluir a sua conta?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="delete()">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="atualizarModal" tabindex="-1" role="dialog" aria-labelledby="atualizarModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="atualizarModalLabel">Atualizar Cadastro</h5>
+        <h5 class="modal-title" id="atualizarModalLabel"><i class="fas fa-edit"></i> Atualizar Cadastro</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -109,17 +127,17 @@
           <div class="flex-container">
             <div class="left">
               <div class="form-group">
-                <label for="idInp">Seu ID</label>
+                <label for="idInp"><i class="fas fa-id-card"></i> Seu ID</label>
                 <input #idInp class="form-control" id="idInp" formControlName="id">
               </div>
 
               <div class="form-group">
-                <label for="nameInp">Nome</label>
+                <label for="nameInp"><i class="fas fa-user"></i> Nome</label>
                 <input #nameInp class="form-control" id="nameInp" formControlName="name">
               </div>
 
               <div class="form-group">
-                <label for="emailInp">Email</label>
+                <label for="emailInp"><i class="fas fa-envelope"></i> Email</label>
                 <input #emailInp class="form-control" id="emailInp" formControlName="email" required type="email">
                 <div *ngIf="updateUserForm.controls['email'].invalid && (updateUserForm.controls['email'].dirty || updateUserForm.controls['email'].touched)" class="text-danger">
                   Digite um email válido.
@@ -127,7 +145,7 @@
               </div>
 
               <div class="form-group">
-                <label for="pwInp">Senha</label>
+                <label for="pwInp"><i class="fas fa-lock"></i> Senha</label>
                 <input #pwInp class="form-control" id="pwInp" formControlName="password" required minlength="6">
                 <div *ngIf="updateUserForm.controls['password'].invalid && (updateUserForm.controls['password'].dirty || updateUserForm.controls['password'].touched)" class="text-danger">
                   A senha deve ter pelo menos 6 caracteres.
@@ -135,7 +153,7 @@
               </div>
 
               <div class="form-group">
-                <label for="phoneInp">Telefone</label>
+                <label for="phoneInp"><i class="fas fa-phone"></i> Telefone</label>
                 <input #phoneInp class="form-control" id="phoneInp" formControlName="phone" required pattern="[0-9]{10}">
                 <div *ngIf="updateUserForm.controls['phone'].invalid && (updateUserForm.controls['phone'].dirty || updateUserForm.controls['phone'].touched)" class="text-danger">
                   Digite um número de telefone válido com 10 dígitos.
@@ -143,7 +161,7 @@
               </div>
 
               <div class="form-group">
-                <label for="addressInp">Endereço</label>
+                <label for="addressInp"><i class="fas fa-map-marker-alt"></i> Endereço</label>
                 <input #addressInp class="form-control" id="addressInp" formControlName="address" required>
                 <div *ngIf="updateUserForm.controls['address'].invalid && (updateUserForm.controls['address'].dirty || updateUserForm.controls['address'].touched)" class="text-danger">
                   Digite um endereço válido.
@@ -163,11 +181,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary" (click)="update()">Salvar</button>
+        <button type="button" class="btn btn-primary" (click)="update()"><i class="fas fa-save"></i> Salvar</button>
       </div>
     </div>
   </div>
 </div>
-
-
-

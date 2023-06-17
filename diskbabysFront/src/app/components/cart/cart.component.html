@@ -5,10 +5,10 @@
 
   <div *ngIf="emptyCartCheck">
     <button (click)="emptyCart()" class="btn btn-danger mr-2">
-      Limpar Carrinho
+      <i class="fas fa-trash-alt"></i> Limpar Carrinho
     </button>
     <button (click)="finalize = true" class="btn btn-primary">
-      Finalizar compra
+      <i class="fas fa-check"></i> Finalizar compra
     </button>
 
     <table class="table mt-4">
@@ -27,14 +27,14 @@
           <td>${{ c.preco.toFixed(2) }}</td>
           <td>
             <button class="btn btn-danger btn-sm" (click)="delete(c.cid)">
-              <i class="material-icons">Deletar</i>
+              <i class="fas fa-trash-alt"></i> Deletar
             </button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <p class="text-center" >Total: <b>${{ totalOrder }}</b></p>
+    <p class="text-center">Total: <b>${{ totalOrder }}</b></p>
 
   </div>
 
@@ -65,7 +65,7 @@
                 <input type="text" class="form-control" formControlName="cep" id="cep" placeholder="Digite o CEP">
                 <div class="input-group-append">
                   <button (click)="consult(deliveryForm.get('cep').value)" class="btn btn-outline-secondary" type="button">
-                    <i class="fa fa-search"></i>
+                    <i class="fas fa-search"></i>
                   </button>
                 </div>
               </div>
@@ -98,9 +98,14 @@
                 <option value="picpay">PicPay</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary m-2" (click)="checkoutOrder()">Finalizar Compra</button>
-            <button type="submit" class="btn btn-secondary m-2" (click)="goCart()">Voltar para o carrinho</button>
+            <button type="submit" class="btn btn-primary m-2" (click)="checkoutOrder()">
+              <i class="fas fa-check"></i> Finalizar Compra
+            </button>
+            <button type="submit" class="btn btn-secondary m-2" (click)="goCart()">
+              <i class="fas fa-arrow-left"></i> Voltar para o carrinho
+            </button>
           </form>
+
 
         </div>
       </div>

@@ -39,14 +39,20 @@
                 </div>
               </div>
               <div class="col-lg-8 col-md-8 col-12">
-                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }} ID: {{user.id}}</strong></h4>
-                <span class="job_post">{{ user.email }}</span>
-                <p>{{ user.address }}</p>
+                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }} ID: {{ user.id }}</strong></h4>
+                <span class="job_post"><i class="fas fa-envelope"></i> E-mail: {{ user.email }}</span>
+                <p><i class="fas fa-map-marker-alt"></i> {{ user.address }}</p>
+                <p><i class="fas fa-phone"></i> Telefone: {{ user.phone }}</p>
                 <div>
-                  <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#atualizarModal" (click)="update(user)">Atualizar</button>
-                  <button class="btn btn-primary btn-round btn-danger ml-3" (click)="delete(user.id)">Excluir conta</button>
+                  <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#atualizarModal" (click)="update(user)">
+                    <i class="fas fa-edit"></i> Atualizar
+                  </button>
+                  <button class="btn btn-primary btn-round btn-danger ml-3" data-toggle="modal" data-target="#deleteModal" (click)="openDeleteModal(user.id)">
+                    <i class="fas fa-trash-alt"></i> Excluir conta
+                  </button>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -57,22 +63,45 @@
   <ng-template #noUsers>
     <p>Nenhum usuário cadastrado.</p>
   </ng-template>
+
+
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true" *ngIf="showDeleteModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal">Excluir Usuário</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja realmente excluir esse usuário?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteConfirmed()">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="container profile-page" *ngIf="currentPage === 'listar-pedidos'">
   <div class="container">
-    <h1>Pedidos</h1>
+    <h1><i class="fas fa-box"></i> Pedidos</h1>
 
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            <th>Ordem ID</th>
-            <th>ID do Cliente</th>
-            <th>Preço Total</th>
-            <th>Forma de Pagamento</th>
-            <th>Data</th>
-            <th>Endereço</th>
+            <th><i class="fas fa-sort-numeric-up"></i> Ordem ID</th>
+            <th><i class="fas fa-user"></i> ID do Cliente</th>
+            <th><i class="fas fa-dollar-sign"></i> Preço Total</th>
+            <th><i class="fas fa-credit-card"></i> Forma de Pagamento</th>
+            <th><i class="far fa-calendar-alt"></i> Data</th>
+            <th><i class="fas fa-map-marker-alt"></i> Endereço</th>
           </tr>
         </thead>
         <tbody>
@@ -95,6 +124,8 @@
     </ng-template>
   </div>
 </div>
+
+
 
 
 
@@ -177,18 +208,18 @@
 
 <div class="container profile-page" *ngIf="currentPage === 'atualizar-produto'">
   <div class="container">
-    <h1>Inventário</h1>
+    <h1><i class="fas fa-cubes"></i> Inventário</h1>
 
     <div class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            <th>Id do Produto</th>
-            <th>Foto do Produto</th>
-            <th>Nome do Produto</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>Editar</th>
+            <th><i class="fas fa-id-card"></i> Id do Produto</th>
+            <th><i class="fas fa-image"></i> Foto do Produto</th>
+            <th><i class="fas fa-cube"></i> Nome do Produto</th>
+            <th><i class="fas fa-file-alt"></i> Descrição</th>
+            <th><i class="fas fa-dollar-sign"></i> Preço</th>
+            <th><i class="fas fa-edit"></i> Editar</th>
           </tr>
         </thead>
         <tbody>
@@ -201,10 +232,10 @@
               <td>R$ {{ product.preco.toFixed(2) }}</td>
               <td>
                 <button class="btn btn-primary " data-toggle="modal" data-target="#atualizarModalProduto" (click)="toggleUpdateProduct(product)">
-                  <i class="bi bi-pencil"></i> Editar
+                  <i class="fas fa-pencil-alt"></i> Editar
                 </button>
                 <button class="btn btn-danger ml-3" (click)="deteleProductDialog(product.pid)">
-                  <i class="bi bi-trash"></i> Deletar
+                  <i class="fas fa-trash-alt"></i> Deletar
                 </button>
               </td>
             </tr>
@@ -272,20 +303,20 @@
 
 <div class="container profile-page" *ngIf="currentPage === 'adicionar-produto'">
   <form [formGroup]="newProductForm" (ngSubmit)="postProduct()" class="centerForm">
-    <h1 class="text-center">Adicionar um novo produto:</h1>
+    <h1 class="text-center"><i class="fas fa-plus-circle"></i> Adicionar um novo produto:</h1>
 
     <div class="form-group">
-      <label for="nameInp">Nome do Produto:</label>
+      <label for="nameInp"><i class="fas fa-cube"></i> Nome do Produto:</label>
       <input #nameInp class="form-control" id="nameInp" placeholder="Nome" formControlName="product_name">
     </div>
 
     <div class="form-group">
-      <label for="descInp">Descrição:</label>
+      <label for="descInp"><i class="fas fa-file-alt"></i> Descrição:</label>
       <textarea #descInp class="form-control" id="descInp" placeholder="Descreva o produto" formControlName="description"></textarea>
     </div>
 
     <div class="form-group">
-      <label for="priceInp">Preço:</label>
+      <label for="priceInp"><i class="fas fa-dollar-sign"></i> Preço:</label>
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text">R$</span>
@@ -295,7 +326,7 @@
     </div>
 
     <div class="form-group">
-      <label for="fileInp">Imagem:</label>
+      <label for="fileInp"><i class="fas fa-image"></i> Imagem:</label>
       <div class="custom-file">
         <input #fileInp class="custom-file-input" id="fileInp" type="file" accept=".jpeg" (change)="onFileChange($event)">
         <label class="custom-file-label" for="fileInp">Escolha um arquivo JPEG</label>
@@ -303,7 +334,7 @@
       <small class="form-text text-muted">Somente arquivos JPEG são permitidos.</small>
     </div>
 
-    <button class="btn btn-primary btn-block adminBtn" type="submit">Adicionar novo produto</button>
+    <button class="btn btn-primary btn-block adminBtn" type="submit"><i class="fas fa-plus"></i> Adicionar novo produto</button>
   </form>
 </div>
 

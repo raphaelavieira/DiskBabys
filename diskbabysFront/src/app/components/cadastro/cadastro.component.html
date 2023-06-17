@@ -7,7 +7,9 @@
       <form [formGroup]="registerForm" (ngSubmit)="post()" novalidate class="bg-white rounded shadow p-5">
         <h3 class="text-center mb-4">Cadastrar</h3>
         <div class="mb-3">
-          <label for="username" class="form-label">Nome</label>
+          <label for="username" class="form-label">
+            <i class="fas fa-user"></i> Nome
+          </label>
           <input type="text" class="form-control" id="username" formControlName="name" placeholder="Insira o seu nome">
           <div *ngIf="registerForm.get('name').invalid && (registerForm.get('name').dirty || registerForm.get('name').touched)" class="text-danger">
             <div *ngIf="registerForm.get('name').errors.required">Nome é obrigatório.</div>
@@ -15,7 +17,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label">
+            <i class="fas fa-envelope"></i> Email
+          </label>
           <input type="text" class="form-control" id="email" formControlName="email" placeholder="Insira o usuário" >
           <div *ngIf="registerForm.get('email').invalid && (registerForm.get('email').dirty || registerForm.get('email').touched)" class="text-danger">
             <div *ngIf="registerForm.get('email').errors.required">Email é obrigatório.</div>
@@ -24,7 +28,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="password" class="form-label">Senha</label>
+          <label for="password" class="form-label">
+            <i class="fas fa-lock"></i> Senha
+          </label>
           <input type="password" class="form-control" id="password" formControlName="password" placeholder="Insira a senha" >
           <div *ngIf="registerForm.get('password').invalid && (registerForm.get('password').dirty || registerForm.get('password').touched)" class="text-danger">
             <div *ngIf="registerForm.get('password').errors.required">Senha é obrigatória.</div>
@@ -32,18 +38,26 @@
 
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">Digite a senha novamente</label>
+          <label for="password" class="form-label">
+            <i class="fas fa-lock"></i> Digite a senha novamente
+          </label>
           <input type="password" class="form-control" id="password" formControlName="reenterPassword" placeholder="Digite a senha novamente">
         </div>
         <div class="mb-3">
-          <label for="phone" class="form-label">Digite o seu telefone</label>
+          <label for="phone" class="form-label">
+            <i class="fas fa-phone"></i> Digite o seu telefone
+          </label>
           <input type="number" class="form-control" id="phone" formControlName="phone" placeholder="Digite o seu telefone">
         </div>
         <div class="mb-3">
-          <label for="address" class="form-label">Digite o seu endereço </label>
-          <input type="text" class="form-control" id="address" formControlName="address" placeholder="Digite o seu endereço ">
+          <label for="address" class="form-label">
+            <i class="fas fa-address-card"></i> Digite o seu endereço
+          </label>
+          <input type="text" class="form-control" id="address" formControlName="address" placeholder="Digite o seu endereço">
         </div>
-        <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="registerForm.invalid || registerForm.pending">Cadastrar</button>
+        <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="registerForm.invalid || registerForm.pending">
+          <i class="fas fa-user-plus"></i> Cadastrar
+        </button>
         <hr>
         <p class="text-center mb-0">Já tem uma conta? faça  <a href="/login" class="text-decoration-none">Login</a></p>
       </form>

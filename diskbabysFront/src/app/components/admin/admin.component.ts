@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
+import { orders } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
 import { OrderService } from 'src/app/services/order.service';
@@ -25,6 +26,8 @@ export class AdminComponent implements OnInit {
   updateProductForm: FormGroup;
   products$: Observable<Product[]>;
   productToUpdate: Product;
+  showDeleteModal: boolean = false;
+  userToDeleteId: number;
 
 
   constructor(
@@ -73,6 +76,18 @@ export class AdminComponent implements OnInit {
       price: new FormControl("",[Validators.required]),
       picture: new FormControl("",[Validators.required])
     });
+  }
+  openDeleteModal(userId: number) {
+    this.userToDeleteId = userId;
+    this.showDeleteModal = true;
+  }
+
+  deleteConfirmed() {
+    // Chamada para a função delete(user.id)
+    this.delete(this.userToDeleteId);
+
+    // Fechar o modal de confirmação
+    this.showDeleteModal = false;
   }
 
   update(userPut: User): void {

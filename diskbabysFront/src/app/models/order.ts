@@ -1,4 +1,4 @@
-interface orders {
+export interface orders {
   oid: number;
   id: number;
   preco_total: number;

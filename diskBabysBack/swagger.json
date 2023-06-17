@@ -1,0 +1,1265 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API",
+      "description": "Documentação API DiskBaby",
+      "version": "1.0.0"
+    },
+    "basePath": "/",
+    "paths": {
+      "/all": {
+        "get": {
+          "tags": ["Usuário"],
+          "summary": "Obter todos os usuários",
+          "description": "Retorna uma lista de todos os usuários cadastrados.",
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/register": {
+        "post": {
+          "tags": ["Usuário"],
+          "summary": "Registrar novo usuário",
+          "description": "Cria um novo usuário com as informações fornecidas.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Usuário criado com sucesso"
+            },
+            "400": {
+              "description": "Requisição inválida",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/shop": {
+        "get": {
+          "tags": ["Produto"],
+          "summary": "Obter todos os produtos",
+          "description": "Retorna uma lista de todos os produtos disponíveis na loja.",
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/user/cart/{id}": {
+        "get": {
+          "tags": ["Carrinho"],
+          "summary": "Obter detalhes do carrinho",
+          "description": "Retorna os detalhes do carrinho do usuário com base no ID.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do carrinho",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Nenhum carrinho encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/order/requests": {
+        "get": {
+          "tags": ["Pedido"],
+          "summary": "Obter todos os pedidos",
+          "description": "Retorna uma lista de todos os pedidos.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/order/requests/{id}": {
+        "get": {
+          "tags": ["Pedido"],
+          "summary": "Obter detalhes do pedido",
+          "description": "Retorna os detalhes de um pedido com base no ID.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do pedido",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": ["Usuário"],
+          "summary": "Login do usuário",
+          "description": "Faz o login do usuário com as credenciais fornecidas.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "202": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LoginResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Credenciais inválidas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/info": {
+        "get": {
+          "tags": ["Usuário"],
+          "summary": "Obter informações do usuário",
+          "description": "Retorna as informações do usuário com base no email, senha e função fornecidos.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCredentials"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/user": {
+        "put": {
+          "tags": ["Usuário"],
+          "summary": "Atualizar informações do usuário",
+          "description": "Atualiza as informações do usuário com base nos dados fornecidos.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Requisição inválida",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Credenciais inválidas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Falha na autenticação do token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/picture": {
+        "put": {
+          "tags": ["Usuário"],
+          "summary": "Atualizar foto de perfil do usuário",
+          "description": "Atualiza a foto de perfil do usuário com base nos dados fornecidos.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID do usuário"
+                    },
+                    "picture": {
+                      "type": "string",
+                      "description": "Foto de perfil do usuário"
+                    }
+                  },
+                  "required": ["id", "picture"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string",
+                    "example": "OK",
+                    "description": "Mensagem de sucesso"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Requisição inválida",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string",
+                    "example": "Erro",
+                    "description": "Mensagem de erro"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{id}": {
+        "delete": {
+          "tags": ["Usuário"],
+          "summary": "Excluir usuário",
+          "description": "Exclui o usuário com o ID fornecido.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do usuário a ser excluído"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de erro"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/shop/{pid}": {
+        "get": {
+          "tags": ["Produto"],
+          "summary": "Obter produto da loja",
+          "description": "Retorna os detalhes do produto com base no ID fornecido.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "pid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do produto"
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Produto não encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/user/shop/cart/{pid}": {
+        "get": {
+          "tags": ["Produto"],
+          "summary": "Obter produto para o carrinho",
+          "description": "Retorna os detalhes do produto com base no ID fornecido, para ser adicionado ao carrinho.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "pid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do produto"
+            }
+          ],
+          "responses": {
+            "202": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Produto não encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/product": {
+        "post": {
+          "tags": ["Produto"],
+          "summary": "Adicionar produto",
+          "description": "Adiciona um novo produto com base nos dados fornecidos.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewProduct"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/product/{pid}": {
+        "delete": {
+          "tags": ["Produto"],
+          "summary": "Excluir produto",
+          "description": "Exclui um produto com base no ID do produto fornecido.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "pid",
+              "in": "path",
+              "description": "ID do produto",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/product/update": {
+        "put": {
+          "tags": ["Produto"],
+          "summary": "Atualizar produto",
+          "description": "Atualiza um produto com base nos dados fornecidos.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductUpdate"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/cart": {
+        "post": {
+          "tags": ["Carrinho"],
+          "summary": "Adicionar item ao carrinho",
+          "description": "Adiciona um item ao carrinho do usuário com base nos dados fornecidos.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartItem"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Criado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/cart/{cid}": {
+        "delete": {
+          "tags": ["Carrinho"],
+          "summary": "Excluir item do carrinho",
+          "description": "Exclui um item do carrinho do usuário com base no ID do item fornecido.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "cid",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do item do carrinho"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/cart/clear/{id}": {
+        "delete": {
+          "tags": ["Carrinho"],
+          "summary": "Limpar carrinho",
+          "description": "Remove todos os itens do carrinho do usuário com base no ID do usuário fornecido.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do usuário"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "boolean",
+                        "description": "Status da resposta"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/cart/items/{id}": {
+        "get": {
+          "tags": ["Carrinho"],
+          "summary": "Número de itens no carrinho",
+          "description": "Retorna o número de itens no carrinho do usuário com base no ID do usuário fornecido.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do usuário"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "records": {
+                        "type": "number",
+                        "description": "Número de itens no carrinho"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/cart/price/{id}": {
+        "get": {
+          "tags": ["Carrinho"],
+          "summary": "Preço total do carrinho",
+          "description": "Retorna o preço total do carrinho do usuário com base no ID do usuário fornecido.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "ID do usuário"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number",
+                        "description": "Preço total do carrinho"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/order": {
+        "post": {
+          "tags": ["Carrinho"],
+          "summary": "Adicionar pedido",
+          "description": "Adiciona um novo pedido para o usuário autenticado.",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID do usuário"
+                    },
+                    "preco_total": {
+                      "type": "number",
+                      "description": "Preço total do pedido"
+                    },
+                    "forma_pagamento": {
+                      "type": "string",
+                      "description": "Forma de pagamento do pedido"
+                    },
+                    "cep": {
+                      "type": "string",
+                      "description": "CEP de entrega"
+                    },
+                    "rua": {
+                      "type": "string",
+                      "description": "Rua de entrega"
+                    },
+                    "bairro": {
+                      "type": "string",
+                      "description": "Bairro de entrega"
+                    },
+                    "cidade": {
+                      "type": "string",
+                      "description": "Cidade de entrega"
+                    },
+                    "estado": {
+                      "type": "string",
+                      "description": "Estado de entrega"
+                    },
+                    "numero": {
+                      "type": "string",
+                      "description": "Número de entrega"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "preco_total",
+                    "forma_pagamento",
+                    "cep",
+                    "rua",
+                    "bairro",
+                    "cidade",
+                    "estado",
+                    "numero"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Pedido adicionado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de confirmação"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Campos obrigatórios estão em branco",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro interno do servidor",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "ID do usuário"
+            },
+            "name": {
+              "type": "string",
+              "description": "Nome do usuário"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email do usuário"
+            },
+            "picture": {
+              "type": "string",
+              "format": "base64",
+              "description": "Imagem do usuário em formato base64"
+            }
+          }
+        },
+        "RegisterUserRequest": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Endereço de email do usuário",
+              "example": "example@example.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "Senha do usuário",
+              "example": "123456"
+            },
+            "name": {
+              "type": "string",
+              "description": "Nome do usuário",
+              "example": "John Doe"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Número de telefone do usuário",
+              "example": "123456789"
+            },
+            "address": {
+              "type": "string",
+              "description": "Endereço do usuário",
+              "example": "123 Street, City"
+            },
+            "role": {
+              "type": "string",
+              "description": "Função do usuário",
+              "example": "customer"
+            }
+          },
+          "required": ["email", "password", "name", "phone", "address", "role"]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "boolean",
+              "description": "Status da resposta",
+              "example": false
+            },
+            "message": {
+              "type": "string",
+              "description": "Mensagem de erro",
+              "example": "Endereço de email inválido."
+            }
+          }
+        },
+        "Product": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "ID do produto"
+            },
+            "name": {
+              "type": "string",
+              "description": "Nome do produto"
+            },
+            "price": {
+              "type": "number",
+              "description": "Preço do produto"
+            },
+            "picture": {
+              "type": "string",
+              "format": "base64",
+              "description": "Imagem do produto em formato base64"
+            }
+          }
+        },
+        "LoginRequest": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          },
+        "Order": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "ID do pedido"
+            },
+            "status": {
+              "type": "string",
+              "description": "Status do pedido"
+            },
+            "total": {
+              "type": "number",
+              "description": "Valor total do pedido"
+            }
+          }
+        },
+        "UserCredentials": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "Endereço de email do usuário",
+                "example": "example@example.com"
+              },
+              "password": {
+                "type": "string",
+                "description": "Senha do usuário",
+                "example": "123456"
+              },
+              "role": {
+                "type": "string",
+                "description": "Função do usuário",
+                "example": "customer"
+              }
+            },
+            "required": ["email", "password", "role"]
+          }
+         
+        
+    
+    
+      },
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
+  

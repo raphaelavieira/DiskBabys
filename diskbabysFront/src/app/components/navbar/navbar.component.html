@@ -18,12 +18,18 @@
       </ul>
       <ul class="navbar-nav mb-2 mb-lg-0 mx-2">
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi-cart-fill me-1"></i>
+          <a class="nav-link" href="/cart">
+            <i class="bi-cart-fill me-1" ></i>
             Carrinho
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="currentUser">
+          <a class="nav-link" href="/login">
+            <i class="bi-person-fill me-1"></i>
+            Minha Conta
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="!currentUser">
           <a class="nav-link" href="/login">
             <i class="bi-person-fill me-1"></i>
             Login

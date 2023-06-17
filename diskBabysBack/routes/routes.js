@@ -32,10 +32,10 @@ router.delete('/user/cart/:cid', cartController.deleteCartItem)
 router.delete('/user/cart/clear/:id', cartController.deleteAllCartItems)
 router.get('/user/cart/items/:id', cartController.numItem)
 router.get('/user/cart/price/:id', cartController.totalPrice)
-router.post('/user/order', cartController.addToOrder)
+router.post('/user/order', authenticateToken, cartController.addToOrder)
 //Rotas do pedido
-router.get('/order/requests', orderController.getAllRequets)
-router.get('/order/requests/:id', orderController.getOrder)
+router.get('/order/requests',authenticateToken,orderController.getAllRequets)
+router.get('/order/requests/:id',authenticateToken, orderController.getOrder)
 
 
 

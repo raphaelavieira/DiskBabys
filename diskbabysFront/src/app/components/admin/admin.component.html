@@ -45,10 +45,10 @@
                 </div>
               </div>
               <div class="col-lg-8 col-md-8 col-12">
-                <h4 class="m-t-0 m-b-0"><strong>{{ user.name }} ID: {{ user.id }}</strong></h4>
+                <h2 class="m-t-0 m-b-0"><strong>{{ user.name }} ID: {{ user.id }}</strong></h2>
                 <span class="job_post"><i class="fas fa-envelope"></i> E-mail: {{ user.email }}</span>
                 <p><i class="fas fa-map-marker-alt"></i> {{ user.address }}</p>
-                <p><i class="fas fa-phone"></i> Telefone: {{ user.phone }}</p>
+                <span><i class="fas fa-phone"></i> Telefone: {{ user.phone }}</span>
                 <div>
                   <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#atualizarModal" (click)="update(user)">
                     <i class="fas fa-edit"></i> Atualizar

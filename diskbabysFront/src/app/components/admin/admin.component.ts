@@ -19,7 +19,7 @@ export class AdminComponent implements OnInit {
   updateUserForm: FormGroup;
   showModal: boolean = false;
   users$:Observable<User[]>;
-  requests:Observable<Pedidos[]>;
+  requests:Observable<orders[]>;
   currentPage: string = 'listar-clientes';
   newProductForm: FormGroup;
   updateProductForm: FormGroup;
@@ -155,7 +155,7 @@ export class AdminComponent implements OnInit {
 
   getAllRequests(){
     this.orderService.fetchAll().subscribe(
-      (requests: Pedidos[]) => {
+      (requests: orders[]) => {
         this.requests = of(requests);
       },
       (error) => {

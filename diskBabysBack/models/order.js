@@ -10,7 +10,18 @@ module.exports = class order{
         return db.execute('SELECT * FROM pedido');
     }
 
-
+    static find(order) {
+        return new Promise((resolve, reject) => {
+          db.execute('select * from pedido where id = ?', [order.id])
+            .then(([rows]) => {
+              resolve(rows);
+            })
+            .catch(error => {
+              reject({ message: 'Erro ao buscar os Pedidos', error });
+            });
+        });
+      }
+      
       
 
 

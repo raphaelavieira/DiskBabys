@@ -1,4 +1,4 @@
-interface Pedidos {
+interface orders {
   oid: number;
   id: number;
   preco_total: number;

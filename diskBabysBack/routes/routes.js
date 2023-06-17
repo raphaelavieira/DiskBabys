@@ -35,6 +35,7 @@ router.get('/user/cart/price/:id', cartController.totalPrice)
 router.post('/user/order', cartController.addToOrder)
 //Rotas do pedido
 router.get('/order/requests', orderController.getAllRequets)
+router.get('/order/requests/:id', orderController.getOrder)
 
 
 

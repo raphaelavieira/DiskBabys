@@ -18,8 +18,14 @@ export class OrderService {
 
 
 
-  fetchAll(): Observable<Pedidos[]> {
-    return this.http.get<Pedidos[]>(this.url, { responseType: "json" });
+  fetchAll(): Observable<orders[]> {
+    return this.http.get<orders[]>(this.url, { responseType: "json" });
+  }
+
+
+  findOrder(pid: Number): Observable<orders[]> {
+    const orderId = `http://localhost:3000/order/requests/${pid}`;
+    return this.http.get<orders[]>(orderId, { responseType: "json" });
   }
 
 

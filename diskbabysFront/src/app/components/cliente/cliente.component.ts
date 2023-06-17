@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, of } from 'rxjs';
 import { User } from 'src/app/models/user';
+import { OrderService } from 'src/app/services/order.service';
 import { UserListCrudService } from 'src/app/services/user-list-crud.service';
 
 @Component({
@@ -16,8 +18,14 @@ export class ClienteComponent implements OnInit {
   updateUserForm: FormGroup;
   profilePicture: string;
   currUser$: User;
+  orders: orders[] = [];
 
-  constructor(private userListCrudService: UserListCrudService, private router: Router,private toastr: ToastrService,private titleService: Title) {
+
+  constructor(private userListCrudService: UserListCrudService,
+    private router: Router,
+    private toastr: ToastrService,
+    private titleService: Title,
+    private orderService: OrderService,) {
     this.currUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.profilePicture = this.currUser$.picture;
     this.titleService.setTitle('Meu perfil');
@@ -27,6 +35,7 @@ export class ClienteComponent implements OnInit {
     this.loggedInUser$ = JSON.parse(localStorage.getItem('currentUser'));
     this.updateUserForm = this.createFormGroup();
     this.profilePicture = this.loggedInUser$.picture;
+    this.getAllRequests()
   }
 
 
@@ -42,6 +51,22 @@ export class ClienteComponent implements OnInit {
       name: new FormControl(this.loggedInUser$.name, [Validators.required])
     });
   }
+
+  getAllRequests() {
+    this.orderService.findOrder(this.currUser$.id).subscribe(
+      (orders: orders[]) => {
+        this.orders = orders || [];
+      },
+      (error) => {
+        console.log(error);
+        this.toastr.error('Erro ao carregar pedidos', 'Erro');
+
+      }
+    );
+  }
+
+
+
 
   delete(): void {
     this.userListCrudService.delete(this.loggedInUser$.id).subscribe(

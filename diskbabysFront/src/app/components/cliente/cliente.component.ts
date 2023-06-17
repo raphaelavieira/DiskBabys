@@ -107,8 +107,8 @@ export class ClienteComponent implements OnInit {
         if (response && response.status === true) {
           this.toastr.success('Dados atualizados com sucesso!', 'Sucesso');
           localStorage.setItem('currentUser', JSON.stringify(user));
-          window.location.reload();
-          } else if (response && response.status === false) {
+          this.loggedInUser$ = JSON.parse(localStorage.getItem('currentUser'));
+        } else if (response && response.status === false) {
           this.toastr.error(response.message || 'Erro ao atualizar cadastro. Por favor, tente novamente mais tarde.', 'Erro');
           console.log("Erro ao atualizar cadastro: " + response.message);
         } else {

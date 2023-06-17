@@ -35,14 +35,21 @@
           <div *ngIf="registerForm.get('password').invalid && (registerForm.get('password').dirty || registerForm.get('password').touched)" class="text-danger">
             <div *ngIf="registerForm.get('password').errors.required">Senha é obrigatória.</div>
           </div>
-
         </div>
+
         <div class="mb-3">
-          <label for="password" class="form-label">
+          <label for="reenterPassword" class="form-label">
             <i class="fas fa-lock"></i> Digite a senha novamente
           </label>
-          <input type="password" class="form-control" id="password" formControlName="reenterPassword" placeholder="Digite a senha novamente">
+          <input type="password" class="form-control" id="reenterPassword" formControlName="reenterPassword" placeholder="Digite a senha novamente">
+          <div *ngIf="registerForm.get('reenterPassword').invalid && (registerForm.get('reenterPassword').dirty || registerForm.get('reenterPassword').touched)" class="text-danger">
+            <div *ngIf="registerForm.get('reenterPassword').errors.required">Digite a senha novamente.</div>
+          </div>
+          <div *ngIf="registerForm.get('password').value !== registerForm.get('reenterPassword').value" class="text-danger">
+            As senhas não coincidem.
+          </div>
         </div>
+
         <div class="mb-3">
           <label for="phone" class="form-label">
             <i class="fas fa-phone"></i> Digite o seu telefone

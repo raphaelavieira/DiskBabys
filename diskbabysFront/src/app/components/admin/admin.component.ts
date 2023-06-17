@@ -4,9 +4,11 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
+import { Cart } from 'src/app/models/cart';
 import { orders } from 'src/app/models/order';
 import { Product } from 'src/app/models/product';
 import { User } from 'src/app/models/user';
+import { CartCrudService } from 'src/app/services/cart-crud.service';
 import { OrderService } from 'src/app/services/order.service';
 import { ProductCrudService } from 'src/app/services/product-crud.service';
 import { UserListCrudService } from 'src/app/services/user-list-crud.service';
@@ -27,8 +29,16 @@ export class AdminComponent implements OnInit {
   products$: Observable<Product[]>;
   productToUpdate: Product;
   showDeleteModal: boolean = false;
+  showDeleteModalProduto: boolean = false;
+  showDeleteModalCart: boolean = false;
   userToDeleteId: number;
+  cartToDeleteId: number;
+  productToDeleteId: number;
+
   darkMode: boolean = false;
+  selectedUserId: number;
+  abandonedCarts$: Observable<Cart[]>;
+  itemCount$: Observable<any>;
 
 
   constructor(
@@ -37,7 +47,8 @@ export class AdminComponent implements OnInit {
     private orderService: OrderService,
     private toastr: ToastrService,
     private productCrudService: ProductCrudService,
-    private titleService: Title
+    private titleService: Title,
+    private cartCrudService: CartCrudService
     ) { }
 
   ngOnInit(): void {
@@ -83,6 +94,46 @@ export class AdminComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
+  openDeleteModalCart(cartId: number) {
+    this.cartToDeleteId = cartId;
+    this.showDeleteModalCart = true;
+  }
+
+  openDeleteModalProduct(productId: number) {
+    this.productToDeleteId = productId;
+    this.showDeleteModalProduto = true;
+  }
+
+  deleteCart(cid: number): void {
+    this.cartCrudService.delete(cid).subscribe(
+      (response: any) => {
+        if (response && response.status) {
+          this.toastr.success(response.message, 'Sucesso');
+          this.getAbandonedCarts();
+        } else {
+          this.toastr.error(response.message, 'Erro');
+        }
+      },
+      (error) => {
+        this.toastr.error('Erro interno no servidor', 'Erro');
+        console.error(error);
+      }
+    );
+  }
+
+  deleteCartConfirmed() {
+    this.deleteCart(this.cartToDeleteId);
+
+    this.showDeleteModalCart = false;
+  }
+
+  deleteProductConfirmed() {
+    this.deteleProductDialog(this.productToDeleteId);
+
+    this.showDeleteModalCart = false;
+  }
+
+
   deleteConfirmed() {
     this.delete(this.userToDeleteId);
 
@@ -97,6 +148,32 @@ export class AdminComponent implements OnInit {
       document.body.classList.remove('dark');
     }
   }
+  getAbandonedCarts() {
+    if (this.selectedUserId) {
+      // Chame o método no seu service para buscar os carrinhos abandonados com base no ID do cliente selecionado
+      this.abandonedCarts$ = this.cartCrudService.fetchAll(this.selectedUserId);
+      this.itemCount$ = this.cartCrudService.getCount(this.selectedUserId);
+
+      // Verificar se nenhum carrinho foi encontrado
+      this.abandonedCarts$.subscribe(
+        (carts: Cart[]) => {
+          if (carts.length === 0) {
+            this.toastr.info('Nenhum carrinho abandonado encontrado.', 'Informação');
+          }
+        },
+        (error) => {
+          if (error.status === 404) {
+            this.toastr.info('Nenhum carrinho abandonado encontrado.', 'Informação');
+          } else {
+            this.toastr.error('Erro ao buscar carrinhos abandonados.', 'Erro');
+          }
+        }
+      );
+    } else {
+      this.toastr.warning('Por favor, selecione um cliente antes de consultar os carrinhos abandonados.', 'Aviso');
+    }
+  }
+
 
 
   update(userPut: User): void {
@@ -121,7 +198,7 @@ export class AdminComponent implements OnInit {
         console.log(response.status);
         if (response && response.status === true) {
           this.toastr.success('Dados atualizados com sucesso!', 'Sucesso');
-          window.location.reload();
+          this.getAllProducts();
           } else if (response && response.status === false) {
           this.toastr.error(response.message || 'Erro ao atualizar cadastro. Por favor, tente novamente mais tarde.', 'Erro');
           console.log("Erro ao atualizar cadastro: " + response.message);
@@ -156,7 +233,7 @@ export class AdminComponent implements OnInit {
       this.router.navigate([""]);
     }
     else{
-      window.location.reload();
+      this.users$ = this.userListCrudService.fetchAll();
     }
   }
 
@@ -173,6 +250,9 @@ export class AdminComponent implements OnInit {
       this.getAllProducts();
     } else if (page === 'adicionar-produto') {
       this.currentPage = 'adicionar-produto'
+    }
+    else if (page === 'carrinhos-abandonados') {
+      this.currentPage = 'carrinhos-abandonados'
     }
   }
 
@@ -271,7 +351,7 @@ export class AdminComponent implements OnInit {
         if (response.success) {
           this.toastr.success(response.message, 'Sucesso');
           this.currentPage = 'atualizar-produto'
-          location.reload();
+          this.getAllProducts();
         } else {
           this.toastr.error(response.message, 'Erro');
         }
@@ -292,7 +372,7 @@ export class AdminComponent implements OnInit {
         if (response.success) {
           this.toastr.success(response.message, 'Sucesso');
           this.currentPage = 'atualizar-produto'
-          location.reload();
+          this.getAllProducts();
         } else {
           this.toastr.error(response.message, 'Erro');
         }

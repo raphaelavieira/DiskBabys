@@ -17,6 +17,9 @@
       <li class="nav-item">
         <a class="nav-link" id="adicionar-produto" (click)="changePage('adicionar-produto')" [ngClass]="{'active': currentPage === 'adicionar-produto'}">Adicionar Produto</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" id="carrinhos-abandonados" (click)="changePage('carrinhos-abandonados')" [ngClass]="{'active': currentPage === 'carrinhos-abandonados'}">Carrinhos Abandonados</a>
+      </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -34,7 +37,7 @@
 
 <div class="container profile-page" *ngIf="currentPage === 'listar-clientes'">
   <div class="row">
-    <ng-container *ngIf="(users$ | async)?.length; else noUsers">
+    <ng-container *ngIf="(users$ | async)?. length; else noUsers">
       <div class="col-xl-6 col-lg-7 col-md-12" *ngFor="let user of users$ | async">
         <div class="card profile-header">
           <div class="body">
@@ -87,7 +90,27 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" (click)="deleteConfirmed()">Excluir</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteConfirmed()">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModalCart" tabindex="-1" role="dialog" aria-labelledby="deleteModalCart" aria-hidden="true" *ngIf="showDeleteModalCart">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalCart">Excluir Carrinho?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja realmente excluir esse carrinho?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteCartConfirmed()">Excluir</button>
       </div>
     </div>
   </div>
@@ -132,6 +155,59 @@
 </div>
 
 
+<div class="container profile-page" *ngIf="currentPage === 'carrinhos-abandonados'">
+  <div class="container">
+    <h1><i class="fas fa-box"></i> Carrinhos Abandonados</h1>
+
+    <div class="form-group">
+      <select [(ngModel)]="selectedUserId" class="form-control" (change)="getAbandonedCarts()">
+        <option value="" disabled selected>Selecione um cliente</option>
+        <option *ngFor="let user of users$ | async" [value]="user.id">{{ user.name }}</option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+      <button class="btn btn-primary" (click)="getAbandonedCarts()"><i class="fas fa-search"></i> Consultar Carrinho Abandonado</button>
+    </div>
+
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><i class="fas fa-sort-numeric-up"></i> Carrinho ID</th>
+            <th><i class="fas fa-user"></i> ID do Cliente</th>
+            <th><i class="fas fa-sort-numeric-up"></i> Produto ID</th>
+            <th><i class="fas fa-shopping-basket"></i> Nome do Produto</th>
+            <th><i class="fas fa-dollar-sign"></i> Preço</th>
+            <th><i class="fas fa-image"></i> Foto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="(abandonedCarts$ | async)?.length; else noCarts">
+            <tr *ngFor="let cart of abandonedCarts$ | async">
+              <td>{{ cart.cid }}</td>
+              <td>{{ cart.id }}</td>
+              <td>{{ cart.pid }}</td>
+              <td>{{ cart.nome_produto }}</td>
+              <td>R$ {{ cart.preco.toFixed(2) }}</td>
+              <td><img class="product" [src]="cart.picture" width="70" height="70" /></td>
+              <td colspan="6" class="text-center">
+
+                <button class="btn btn-danger "  data-toggle="modal" data-target="#deleteModalCart" (click)="openDeleteModalCart(cart.cid)"><i class="fas fa-trash"></i> Excluir</button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noCarts>
+      <p>Nenhum carrinho abandonado encontrado.</p>
+    </ng-template>
+  </div>
+</div>
 
 
 
@@ -240,7 +316,7 @@
                 <button class="btn btn-primary " data-toggle="modal" data-target="#atualizarModalProduto" (click)="toggleUpdateProduct(product)">
                   <i class="fas fa-pencil-alt"></i> Editar
                 </button>
-                <button class="btn btn-danger ml-3" (click)="deteleProductDialog(product.pid)">
+                <button class="btn btn-danger ml-3" data-toggle="modal" data-target="#deleteModalProduct" (click)="openDeleteModalProduct(product.pid)">
                   <i class="fas fa-trash-alt"></i> Deletar
                 </button>
               </td>
@@ -253,6 +329,26 @@
     <ng-template #noProducts>
       <p>Nenhum produto cadastrado.</p>
     </ng-template>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModalProduct" tabindex="-1" role="dialog" aria-labelledby="deleteModalProduct" aria-hidden="true" *ngIf="showDeleteModalProduto">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalProduct">Excluir Produto?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja realmente excluir esse produto?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteProductConfirmed()">Excluir</button>
+      </div>
+    </div>
   </div>
 </div>
 

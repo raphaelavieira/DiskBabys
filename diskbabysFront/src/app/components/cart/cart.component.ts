@@ -11,7 +11,7 @@ import { CartCrudService } from 'src/app/services/cart-crud.service';
 
 @Component({
   selector: 'app-cart',
-  templateUrl: './cart.component.html',
+  templateUrl:  './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
@@ -78,13 +78,20 @@ export class CartComponent implements OnInit {
       this.toastr.error('Erro ao consultar CEP', 'Erro');
     }
   }
-
+  teste(){
+    console.log(this.cartItems$)
+  }
 
   delete(cid: number): void {
     this.cartCrudService.delete(cid).subscribe(
       (response: any) => {
         if (response && response.status) {
           this.toastr.success(response.message, 'Sucesso');
+          this.cartItems$ = this.cartCrudService.fetchAll(this.currUser$.id)
+          this.itemCount$ = this.cartCrudService.getCount(this.currUser$.id)
+          this.price$ = this.cartCrudService.getPrice(this.currUser$.id)
+          this.showCart();
+          this.total();
         } else {
           this.toastr.error(response.message, 'Erro');
         }
@@ -94,7 +101,6 @@ export class CartComponent implements OnInit {
         console.error(error);
       }
     );
-    window.location.reload();
   }
 
   checkout(): void {
@@ -108,7 +114,7 @@ export class CartComponent implements OnInit {
   emptyCart(): void {
     this.cartCrudService.deleteAll(this.currUser$.id).subscribe();
     this.toastr.success('Carrinho limpo com sucesso', 'Sucesso');
-    window.location.reload();
+    this.router.navigate(['/home']);
   }
 
   emptyCartCheck: boolean = false;

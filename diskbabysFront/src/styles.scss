@@ -1,1 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
+body.dark {
+  background-color: #222;
+  color: #fff;
+}
+
+body.dark table.table {
+  color: #fff;
+}
+
+body.dark table.table thead {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark table.table tbody tr {
+  background-color: #444;
+}
+
+body.dark table.table tbody tr:nth-child(even) {
+  background-color: #555;
+}
+
+body.dark table.table td,
+body.dark table.table th {
+  border-color: #fff;
+}
+
+body.dark .modal-content {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark .modal-header {
+  background-color: #222;
+  border-color: #fff;
+  color: #fff;
+}
+
+body.dark .modal-footer {
+  background-color: #222;
+  border-color: #fff;
+}
+
+body.dark .close {
+  color: #fff;
+}
+
+body.dark .table-responsive {
+  overflow-x: auto;
+}
+
+body.dark tr,
+body.dark h5 {
+  color: #fff;
+}

@@ -4,7 +4,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav flex-grow-1 mb-2 mb-lg-0 mx-2">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#!">Home</a>
@@ -35,11 +35,17 @@
             Login
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="currentUser">
           <a class="nav-link" href="#" (click)="Logout()">
             <i class="fas fa-sign-out-alt me-1"></i>
             Logout
           </a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link btn btn-link" (click)="toggleDarkMode()">
+            <i class="fas fa-moon me-1"></i>
+            Dark Mode
+          </button>
         </li>
       </ul>
     </div>

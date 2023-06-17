@@ -28,6 +28,7 @@ export class AdminComponent implements OnInit {
   productToUpdate: Product;
   showDeleteModal: boolean = false;
   userToDeleteId: number;
+  darkMode: boolean = false;
 
 
   constructor(
@@ -83,12 +84,20 @@ export class AdminComponent implements OnInit {
   }
 
   deleteConfirmed() {
-    // Chamada para a função delete(user.id)
     this.delete(this.userToDeleteId);
 
-    // Fechar o modal de confirmação
     this.showDeleteModal = false;
   }
+  toggleDarkMode() {
+    this.darkMode = !this.darkMode;
+
+    if (this.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }
+
 
   update(userPut: User): void {
     this.updateUserForm = this.createFormGroup(userPut);

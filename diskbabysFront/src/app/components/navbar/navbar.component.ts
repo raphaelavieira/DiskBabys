@@ -9,18 +9,28 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NavbarComponent implements OnInit {
   currentUser: string;
+  darkMode: boolean = false; // Adicione esta propriedade para controlar o estado do dark mode
 
-
-  constructor(private router: Router,private toastr: ToastrService) { }
+  constructor(private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.currentUser = localStorage.getItem('currentUser');
   }
 
-  Logout(){
+  Logout() {
     this.currentUser = null;
     localStorage.clear();
     this.router.navigate(['home']);
-    this.toastr.success(' Logout  realizado com sucesso');
+    this.toastr.success('Logout realizado com sucesso');
+  }
+
+  toggleDarkMode() {
+    this.darkMode = !this.darkMode;
+
+    if (this.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
   }
 }
